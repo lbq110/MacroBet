@@ -11,6 +11,7 @@ interface ShockwavePanelProps {
 export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+    const [activeMode, setActiveMode] = useState<string | null>(null);
 
     // Countdown Logic
     useEffect(() => {
@@ -40,7 +41,20 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
 
     const handleSelect = (mode: string, optionId: string) => {
         if (isLocked) return;
+        // Only allow selection within the active mode, or set a new active mode
+        if (activeMode && activeMode !== mode) return;
+
+        setActiveMode(mode);
         setSelectedOptions(prev => ({ ...prev, [mode]: optionId }));
+    };
+
+    const clearSelection = () => {
+        setActiveMode(null);
+        setSelectedOptions({});
+    };
+
+    const isModeDisabled = (mode: string) => {
+        return activeMode !== null && activeMode !== mode;
     };
 
     return (
@@ -82,7 +96,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
 
             <div className="game-modes-grid">
                 {/* 玩法 A: Data Sniper */}
-                <div className="game-box">
+                <div className={`game-box ${isModeDisabled('sniper') ? 'mode-disabled' : ''} ${activeMode === 'sniper' ? 'mode-active' : ''}`}>
                     <div className="box-title">
                         <Target size={18} className="icon-sniper" />
                         <span>Data Sniper</span>
@@ -94,7 +108,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                                 key={opt.id}
                                 className={`option-btn ${opt.rangeLabel.toLowerCase()} ${selectedOptions['sniper'] === opt.id ? 'active' : ''}`}
                                 onClick={() => handleSelect('sniper', opt.id)}
-                                disabled={isLocked}
+                                disabled={isLocked || isModeDisabled('sniper')}
                             >
                                 {opt.rangeLabel === 'DOVISH' && <TrendingUp size={16} />}
                                 {opt.rangeLabel === 'HAWKISH' && <TrendingDown size={16} />}
@@ -109,7 +123,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 </div>
 
                 {/* 玩法 B: Volatility Hunter */}
-                <div className="game-box">
+                <div className={`game-box ${isModeDisabled('vol') ? 'mode-disabled' : ''} ${activeMode === 'vol' ? 'mode-active' : ''}`}>
                     <div className="box-title">
                         <Zap size={18} className="icon-vol" />
                         <span>Volatility Hunter</span>
@@ -120,7 +134,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                                 key={opt.id}
                                 className={`vol-btn ${selectedOptions['vol'] === opt.id ? 'active' : ''}`}
                                 onClick={() => handleSelect('vol', opt.id)}
-                                disabled={isLocked}
+                                disabled={isLocked || isModeDisabled('vol')}
                             >
                                 <span className="vol-lab">{opt.rangeLabel}</span>
                                 <span className="vol-sub">
@@ -132,7 +146,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 </div>
 
                 {/* 玩法 C: Jackpot */}
-                <div className="game-box jackpot-box">
+                <div className={`game-box jackpot-box ${isModeDisabled('jackpot') ? 'mode-disabled' : ''} ${activeMode === 'jackpot' ? 'mode-active' : ''}`}>
                     <div className="box-title">
                         <Trophy size={18} className="icon-jackpot" />
                         <span>Jackpot</span>
@@ -142,8 +156,8 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                         {jackpotOptions.map(opt => (
                             <div
                                 key={opt.id}
-                                className={`jackpot-item ${selectedOptions['jackpot'] === opt.id ? 'active' : ''}`}
-                                onClick={() => handleSelect('jackpot', opt.id)}
+                                className={`jackpot-item ${selectedOptions['jackpot'] === opt.id ? 'active' : ''} ${isModeDisabled('jackpot') ? 'disabled' : ''}`}
+                                onClick={() => !isModeDisabled('jackpot') && handleSelect('jackpot', opt.id)}
                             >
                                 <span>{opt.rangeLabel}</span>
                                 <span className="odds-badge">{opt.odds}x</span>
@@ -159,6 +173,11 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                     <AlertCircle size={14} />
                     <span>Locked phase starts in {formatTime(timeLeft - 900 < 0 ? 0 : timeLeft - 900)}. No cancellations after lock.</span>
                 </div>
+                {activeMode && (
+                    <button className="clear-selection-btn" onClick={clearSelection}>
+                        Clear Selection
+                    </button>
+                )}
                 <button
                     className={`bet-btn-shockwave ${Object.keys(selectedOptions).length > 0 ? 'ready' : ''}`}
                     disabled={isLocked || Object.keys(selectedOptions).length === 0}
