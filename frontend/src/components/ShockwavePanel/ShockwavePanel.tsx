@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Target, Zap, Trophy, Timer, AlertCircle, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import type { ShockwaveEvent } from '../../types';
 import { EventStatus, ShockwaveSubMode } from '../../types';
+import { useI18n } from '../../i18n';
 import './ShockwavePanel.css';
 
 interface ShockwavePanelProps {
@@ -9,6 +10,7 @@ interface ShockwavePanelProps {
 }
 
 export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
+    const { t } = useI18n();
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
     const [activeMode, setActiveMode] = useState<string | null>(null);
@@ -77,9 +79,9 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 <div className="header-left">
                     <div className="live-indicator">
                         <span className="dot"></span>
-                        LIVE
+                        {t.shockwave.live}
                     </div>
-                    <h1>{event.indicatorName} SHOCKWAVE</h1>
+                    <h1>{event.indicatorName} {t.shockwave.title}</h1>
                 </div>
                 <div className={`countdown-display ${isUrgent ? 'urgent' : ''}`}>
                     <Timer size={24} />
@@ -90,19 +92,21 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
             {/* Event Stats Card */}
             <div className="event-stats-card glass-card">
                 <div className="stat-item">
-                    <span className="label">EXPECTED</span>
+                    <span className="label">{t.shockwave.expected}</span>
                     <span className="value">{event.expectedValue}%</span>
                 </div>
                 <div className="stat-separator"></div>
                 <div className="stat-item">
-                    <span className="label">BASE PRICE (BTC)</span>
+                    <span className="label">{t.shockwave.basePrice} (BTC)</span>
                     <span className="value">${event.basePrice?.toLocaleString() || '---'}</span>
                 </div>
                 <div className="stat-separator"></div>
                 <div className="stat-item status">
-                    <span className="label">MARKET STATUS</span>
+                    <span className="label">{t.shockwave.marketStatus}</span>
                     <span className={`status-tag ${event.status.toLowerCase()}`}>
-                        {event.status}
+                        {event.status === EventStatus.BETTING ? t.shockwave.betting :
+                            event.status === EventStatus.LOCKED ? t.shockwave.locked :
+                                event.status === EventStatus.SETTLING ? t.shockwave.settling : t.shockwave.settled}
                     </span>
                 </div>
             </div>
@@ -115,8 +119,8 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 >
                     <div className="box-title">
                         <Target size={18} className="icon-sniper" />
-                        <span>Data Sniper</span>
-                        <span className="badge">Pari-mutuel</span>
+                        <span>{t.shockwave.dataSniper}</span>
+                        <span className="badge">{t.shockwave.pariMutuel}</span>
                     </div>
                     <div className="sniper-options">
                         {sniperOptions.map(opt => (
@@ -130,8 +134,11 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                                 {opt.rangeLabel === 'HAWKISH' && <TrendingDown size={16} />}
                                 {opt.rangeLabel === 'NEUTRAL' && <Minus size={16} />}
                                 <div className="label-col">
-                                    <span className="main-lab">{opt.rangeLabel}</span>
-                                    <span className="odds">Pool Share: 35%</span>
+                                    <span className="main-lab">
+                                        {opt.rangeLabel === 'DOVISH' ? t.shockwave.dovish :
+                                            opt.rangeLabel === 'NEUTRAL' ? t.shockwave.neutral : t.shockwave.hawkish}
+                                    </span>
+                                    <span className="odds">{t.shockwave.poolShare}: 35%</span>
                                 </div>
                             </button>
                         ))}
@@ -145,7 +152,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 >
                     <div className="box-title">
                         <Zap size={18} className="icon-vol" />
-                        <span>Volatility Hunter</span>
+                        <span>{t.shockwave.volatilityHunter}</span>
                     </div>
                     <div className="vol-options">
                         {volOptions.map(opt => (
@@ -155,9 +162,11 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                                 onClick={() => handleSelect('vol', opt.id)}
                                 disabled={isLocked}
                             >
-                                <span className="vol-lab">{opt.rangeLabel}</span>
+                                <span className="vol-lab">
+                                    {opt.rangeLabel === 'CALM' ? t.shockwave.calm : t.shockwave.tsunami}
+                                </span>
                                 <span className="vol-sub">
-                                    {opt.rangeLabel === 'TSUNAMI' ? '> $1000 Move' : '< $200 Calm'}
+                                    {opt.rangeLabel === 'TSUNAMI' ? t.shockwave.tsunamiDesc : t.shockwave.calmDesc}
                                 </span>
                             </button>
                         ))}
@@ -171,8 +180,8 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 >
                     <div className="box-title">
                         <Trophy size={18} className="icon-jackpot" />
-                        <span>Jackpot</span>
-                        <span className="badge-jackpot">100x Potential</span>
+                        <span>{t.shockwave.jackpot}</span>
+                        <span className="badge-jackpot">{t.shockwave.potential}</span>
                     </div>
                     <div className="jackpot-scroll">
                         {jackpotOptions.map(opt => (
@@ -193,18 +202,18 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
             <div className="shockwave-footer">
                 <div className="info-tip">
                     <AlertCircle size={14} />
-                    <span>Locked phase starts in {formatTime(timeLeft - 900 < 0 ? 0 : timeLeft - 900)}. No cancellations after lock.</span>
+                    <span>{t.shockwave.lockPhase} {formatTime(timeLeft - 900 < 0 ? 0 : timeLeft - 900)}. {t.shockwave.noCancel}</span>
                 </div>
                 {activeMode && (
                     <button className="clear-selection-btn" onClick={clearSelection}>
-                        Clear Selection
+                        {t.shockwave.clearSelection}
                     </button>
                 )}
                 <button
                     className={`bet-btn-shockwave ${Object.keys(selectedOptions).length > 0 ? 'ready' : ''}`}
                     disabled={isLocked || Object.keys(selectedOptions).length === 0}
                 >
-                    {isLocked ? 'BETTING LOCKED' : 'CONFIRM SHOCKWAVE BETS'}
+                    {isLocked ? t.shockwave.bettingLocked : t.shockwave.confirmBets}
                 </button>
             </div>
         </div>
