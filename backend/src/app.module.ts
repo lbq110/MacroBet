@@ -17,26 +17,56 @@ import { Bet } from './modules/bets/bet.entity';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres',
-        host: config.get<string>('DB_HOST', 'localhost'),
-        port: config.get<number>('DB_PORT', 5432),
-        username: config.get<string>('DB_USER', 'postgres'),
-        password: config.get<string>('DB_PASS', 'postgres'),
-        database: config.get<string>('DB_NAME', 'macrobet'),
-        entities: [User, MacroEvent, BetOption, Bet],
-        synchronize: true, // Should be false in production
-      }),
+      useFactory: (config: ConfigService) => {
+        const databaseUrl = config.get<string>('DATABASE_URL');
+
+        // If DATABASE_URL is provided (Railway), use it
+        if (databaseUrl) {
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            entities: [User, MacroEvent, BetOption, Bet],
+            synchronize: true, // Should be false in production
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          };
+        }
+
+        // Fallback to individual variables (local development)
+        return {
+          type: 'postgres',
+          host: config.get<string>('DB_HOST', 'localhost'),
+          port: config.get<number>('DB_PORT', 5432),
+          username: config.get<string>('DB_USER', 'postgres'),
+          password: config.get<string>('DB_PASS', 'postgres'),
+          database: config.get<string>('DB_NAME', 'macrobet'),
+          entities: [User, MacroEvent, BetOption, Bet],
+          synchronize: true, // Should be false in production
+        };
+      },
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        redis: {
-          host: config.get<string>('REDIS_HOST', 'localhost'),
-          port: config.get<number>('REDIS_PORT', 6379),
-        },
-      }),
+      useFactory: (config: ConfigService) => {
+        const redisUrl = config.get<string>('REDIS_URL');
+
+        // If REDIS_URL is provided (Railway), use it
+        if (redisUrl) {
+          return {
+            redis: redisUrl,
+          };
+        }
+
+        // Fallback to individual variables (local development)
+        return {
+          redis: {
+            host: config.get<string>('REDIS_HOST', 'localhost'),
+            port: config.get<number>('REDIS_PORT', 6379),
+          },
+        };
+      },
     }),
     UsersModule,
     EventsModule,
