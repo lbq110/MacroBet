@@ -21,6 +21,19 @@
     font-weight: 700;
 }
 
+.section-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.section-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
 .info-badge {
     display: flex;
     align-items: center;

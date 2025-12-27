@@ -58,6 +58,7 @@ export const en = {
     // Macro Impact
     macroImpact: {
         title: 'MACRO DATA IMPACT',
+        subtitle: '30-Minute Price Change After Data Release',
         historicalOdds: 'Historical Odds Only',
         aboveExpectation: 'Above Expectation',
         inLine: 'In Line',

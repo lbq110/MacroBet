@@ -58,6 +58,7 @@ export const zh = {
     // Macro Impact
     macroImpact: {
         title: '宏观数据影响',
+        subtitle: '数据发布后30分钟价格变化',
         historicalOdds: '仅限历史数据',
         aboveExpectation: '高于预期',
         inLine: '符合预期',

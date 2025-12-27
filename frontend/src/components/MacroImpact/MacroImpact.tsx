@@ -35,7 +35,10 @@ export const MacroImpact: React.FC<MacroImpactProps> = ({ macroData }) => {
     return (
         <div className="macro-impact-section glass-panel">
             <div className="section-header">
-                <h2>{t.macroImpact.title}</h2>
+                <div className="section-title-group">
+                    <h2>{t.macroImpact.title}</h2>
+                    <span className="section-subtitle">{t.macroImpact.subtitle}</span>
+                </div>
                 <div className="info-badge">
                     <Info size={14} />
                     <span>{t.macroImpact.historicalOdds}</span>
