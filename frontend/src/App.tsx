@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { MOCK_ASSETS, MOCK_MACRO_DATA, MOCK_BETS, MOCK_SHOCKWAVE_EVENT } from './data/mockData';
+import { useI18n } from './i18n';
 
 import { AssetHero } from './components/AssetHero/AssetHero';
 import { MacroImpact } from './components/MacroImpact/MacroImpact';
 import { BettingPanel } from './components/BettingPanel/BettingPanel';
 import { ShockwavePanel } from './components/ShockwavePanel/ShockwavePanel';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { Calendar } from './pages/Calendar/Calendar';
 import {
   BarChart3,
@@ -19,35 +21,36 @@ import './App.css';
 function App() {
   const [view, setView] = useState<'detail' | 'calendar'>('detail');
   const [activeAssetId, setActiveAssetId] = useState<string>(MOCK_ASSETS[0].id);
+  const { t } = useI18n();
 
   const activeAsset = MOCK_ASSETS.find(a => a.id === activeAssetId) || MOCK_ASSETS[0];
 
   return (
     <div className="app-container">
       <aside className="sidebar">
-        <div className="sidebar-logo">MacroBet</div>
+        <div className="sidebar-logo">{t.app.title}</div>
         <nav className="nav-links">
           <button
             className={`nav-btn ${view === 'detail' ? 'active' : ''}`}
             onClick={() => setView('detail')}
           >
             <LayoutDashboard size={20} />
-            <span>Dashboard</span>
+            <span>{t.nav.dashboard}</span>
           </button>
           <button
             className={`nav-btn ${view === 'calendar' ? 'active' : ''}`}
             onClick={() => setView('calendar')}
           >
             <CalendarIcon size={20} />
-            <span>Calendar</span>
+            <span>{t.nav.calendar}</span>
           </button>
           <button className="nav-btn">
             <TrendingUp size={20} />
-            <span>Market Stats</span>
+            <span>{t.nav.markets}</span>
           </button>
           <button className="nav-btn">
             <Wallet size={20} />
-            <span>Portfolio</span>
+            <span>{t.nav.portfolio}</span>
           </button>
         </nav>
 
@@ -73,8 +76,11 @@ function App() {
               ))}
             </select>
           </div>
-          <div className="user-profile">
-            <div className="avatar">JD</div>
+          <div className="header-right">
+            <LanguageSwitcher />
+            <div className="user-profile">
+              <div className="avatar">JD</div>
+            </div>
           </div>
         </header>
 

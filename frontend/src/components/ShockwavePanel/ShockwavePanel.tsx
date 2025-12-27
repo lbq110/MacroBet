@@ -61,6 +61,15 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
         return activeMode !== null && activeMode !== mode;
     };
 
+    // Handle clicking on the box itself (empty space) to switch modes
+    const handleBoxClick = (mode: string, defaultOptionId: string) => {
+        if (isLocked) return;
+        if (activeMode !== mode) {
+            setActiveMode(mode);
+            setSelectedOptions({ [mode]: defaultOptionId });
+        }
+    };
+
     return (
         <div className={`shockwave-panel glass-panel ${event.status.toLowerCase()}`}>
             {/* Countdown Header */}
@@ -100,7 +109,10 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
 
             <div className="game-modes-grid">
                 {/* 玩法 A: Data Sniper */}
-                <div className={`game-box ${isModeDisabled('sniper') ? 'mode-disabled' : ''} ${activeMode === 'sniper' ? 'mode-active' : ''}`}>
+                <div
+                    className={`game-box ${isModeDisabled('sniper') ? 'mode-disabled' : ''} ${activeMode === 'sniper' ? 'mode-active' : ''}`}
+                    onClick={() => sniperOptions[0] && handleBoxClick('sniper', sniperOptions[0].id)}
+                >
                     <div className="box-title">
                         <Target size={18} className="icon-sniper" />
                         <span>Data Sniper</span>
@@ -127,7 +139,10 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 </div>
 
                 {/* 玩法 B: Volatility Hunter */}
-                <div className={`game-box ${isModeDisabled('vol') ? 'mode-disabled' : ''} ${activeMode === 'vol' ? 'mode-active' : ''}`}>
+                <div
+                    className={`game-box ${isModeDisabled('vol') ? 'mode-disabled' : ''} ${activeMode === 'vol' ? 'mode-active' : ''}`}
+                    onClick={() => volOptions[0] && handleBoxClick('vol', volOptions[0].id)}
+                >
                     <div className="box-title">
                         <Zap size={18} className="icon-vol" />
                         <span>Volatility Hunter</span>
@@ -150,7 +165,10 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 </div>
 
                 {/* 玩法 C: Jackpot */}
-                <div className={`game-box jackpot-box ${isModeDisabled('jackpot') ? 'mode-disabled' : ''} ${activeMode === 'jackpot' ? 'mode-active' : ''}`}>
+                <div
+                    className={`game-box jackpot-box ${isModeDisabled('jackpot') ? 'mode-disabled' : ''} ${activeMode === 'jackpot' ? 'mode-active' : ''}`}
+                    onClick={() => jackpotOptions[0] && handleBoxClick('jackpot', jackpotOptions[0].id)}
+                >
                     <div className="box-title">
                         <Trophy size={18} className="icon-jackpot" />
                         <span>Jackpot</span>

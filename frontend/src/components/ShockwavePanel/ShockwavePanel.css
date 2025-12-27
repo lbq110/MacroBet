@@ -185,45 +185,118 @@
     color: var(--accent-red);
 }
 
-/* Game Grid */
+/* Game Grid - Premium Design */
 .game-modes-grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr 1fr;
-    gap: var(--space-4);
+    gap: var(--space-5);
 }
 
 .game-box {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
+    padding: var(--space-4);
+    border-radius: 20px;
+    background: rgba(15, 15, 20, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.game-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+/* Red Box - Data Sniper */
+.game-box:first-child {
+    border-color: rgba(239, 68, 68, 0.15);
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.08) 0%, rgba(15, 15, 20, 0.6) 100%);
+}
+
+.game-box:first-child::before {
+    background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.4), transparent);
+}
+
+.game-box:first-child .icon-sniper {
+    color: #ef4444;
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.5));
+}
+
+/* Green Box - Volatility Hunter */
+.game-box:nth-child(2) {
+    border-color: rgba(16, 185, 129, 0.15);
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 15, 20, 0.6) 100%);
+}
+
+.game-box:nth-child(2)::before {
+    background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.4), transparent);
+}
+
+.game-box:nth-child(2) .icon-vol {
+    color: #10b981;
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+}
+
+/* Blue Box - Jackpot */
+.game-box.jackpot-box {
+    border-color: rgba(59, 130, 246, 0.15);
+    background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, rgba(15, 15, 20, 0.6) 100%);
+}
+
+.game-box.jackpot-box::before {
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.4), transparent);
+}
+
+.game-box.jackpot-box .icon-jackpot {
+    color: #3b82f6;
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
 }
 
 .box-title {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
 }
 
 .badge {
-    padding: 2px 6px;
-    background: var(--bg-surface);
-    border-radius: 4px;
+    padding: 3px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
     font-size: 10px;
-    color: var(--text-tertiary);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .badge-jackpot {
-    padding: 2px 6px;
-    background: linear-gradient(90deg, #f59e0b, #ef4444);
-    border-radius: 4px;
+    padding: 3px 8px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    border-radius: 6px;
     font-size: 10px;
+    font-weight: 700;
     color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
 }
 
-/* Sniper Options */
+/* Sniper Options - Premium */
 .sniper-options {
     display: flex;
     flex-direction: column;
@@ -234,121 +307,222 @@
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    padding: var(--space-3);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
+    padding: var(--space-4);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.option-btn:hover:not(:disabled)::before {
+    opacity: 1;
 }
 
 .option-btn:hover:not(:disabled) {
-    border-color: var(--border-strong);
-    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
 }
 
 .option-btn.active {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
     color: var(--text-primary);
+    transform: translateY(-2px);
 }
 
+.option-btn.dovish {
+    border-left: 3px solid rgba(16, 185, 129, 0.3);
+}
+
+.option-btn.dovish:hover:not(:disabled),
 .option-btn.dovish.active {
-    border-color: var(--accent-green);
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.5);
+    border-left: 3px solid #10b981;
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15), inset 0 0 20px rgba(16, 185, 129, 0.05);
 }
 
+.option-btn.neutral {
+    border-left: 3px solid rgba(156, 163, 175, 0.3);
+}
+
+.option-btn.neutral:hover:not(:disabled),
+.option-btn.neutral.active {
+    border-color: rgba(156, 163, 175, 0.5);
+    border-left: 3px solid #9ca3af;
+    background: linear-gradient(90deg, rgba(156, 163, 175, 0.1) 0%, transparent 100%);
+    box-shadow: 0 4px 20px rgba(156, 163, 175, 0.15), inset 0 0 20px rgba(156, 163, 175, 0.05);
+}
+
+.option-btn.hawkish {
+    border-left: 3px solid rgba(239, 68, 68, 0.3);
+}
+
+.option-btn.hawkish:hover:not(:disabled),
 .option-btn.hawkish.active {
-    border-color: var(--accent-red);
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    border-left: 3px solid #ef4444;
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15), inset 0 0 20px rgba(239, 68, 68, 0.05);
 }
 
 .label-col {
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 
 .main-lab {
     font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+}
+
+.option-btn svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.option-btn.active svg {
+    opacity: 1;
 }
 
 .odds {
     font-size: 11px;
     color: var(--text-tertiary);
+    font-weight: 500;
 }
 
-/* Vol Options */
+/* Vol Options - Premium */
 .vol-options {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-2);
 }
 
 .vol-btn {
     display: flex;
     flex-direction: column;
-    padding: var(--space-4);
-    background: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
+    padding: var(--space-4) var(--space-5);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.vol-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.vol-btn:hover:not(:disabled)::before {
+    opacity: 1;
+}
+
+.vol-btn:hover:not(:disabled) {
+    border-color: rgba(16, 185, 129, 0.3);
+    transform: translateY(-2px);
 }
 
 .vol-btn.active {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--accent-blue);
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border-color: rgba(16, 185, 129, 0.4);
     color: var(--text-primary);
-    box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+    box-shadow: 0 4px 25px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(16, 185, 129, 0.2);
+    transform: translateY(-2px);
 }
 
 .vol-lab {
     font-weight: 800;
-    font-size: 16px;
+    font-size: 18px;
+    letter-spacing: 0.05em;
 }
 
 .vol-sub {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-tertiary);
+    margin-top: 2px;
 }
 
-/* Jackpot */
+/* Jackpot - Premium */
 .jackpot-scroll {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
     max-height: 200px;
     overflow-y: auto;
     padding-right: var(--space-2);
 }
 
+.jackpot-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.jackpot-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+
+.jackpot-scroll::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3);
+    border-radius: 2px;
+}
+
 .jackpot-item {
     display: flex;
     justify-content: space-between;
-    padding: var(--space-3);
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 13px;
+    font-weight: 500;
     border: 1px solid transparent;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .jackpot-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.2);
+    transform: translateX(4px);
 }
 
 .jackpot-item.active {
-    border-color: var(--accent-amber);
-    background: rgba(245, 158, 11, 0.1);
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 2px 15px rgba(59, 130, 246, 0.15);
+    transform: translateX(4px);
 }
 
 .odds-badge {
-    color: var(--accent-amber);
-    font-weight: 700;
+    color: #3b82f6;
+    font-weight: 800;
+    font-size: 14px;
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
 /* Footer */
@@ -398,40 +572,51 @@
     opacity: 0.5;
 }
 
-/* Exclusive Mode Selection Styles */
+/* Exclusive Mode Selection Styles - Premium */
 .game-box.mode-disabled {
-    opacity: 0.4;
-    filter: grayscale(0.8);
-    transition: all 0.3s ease;
+    opacity: 0.35;
+    filter: grayscale(0.9) brightness(0.8);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    transform: scale(0.98);
 }
 
 .game-box.mode-disabled:hover {
-    opacity: 0.6;
-    filter: grayscale(0.5);
+    opacity: 0.55;
+    filter: grayscale(0.6) brightness(0.9);
+    transform: scale(1);
 }
 
 .game-box.mode-active {
     transform: scale(1.02);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.game-box.mode-active.game-box:first-child {
-    border: 2px solid var(--accent-red);
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+/* Red Active */
+.game-box.mode-active:first-child {
+    border: 2px solid rgba(239, 68, 68, 0.5);
+    box-shadow:
+        0 0 30px rgba(239, 68, 68, 0.2),
+        0 0 60px rgba(239, 68, 68, 0.1),
+        inset 0 0 30px rgba(239, 68, 68, 0.05);
 }
 
+/* Green Active */
 .game-box.mode-active:nth-child(2) {
-    border: 2px solid var(--accent-green);
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    border: 2px solid rgba(16, 185, 129, 0.5);
+    box-shadow:
+        0 0 30px rgba(16, 185, 129, 0.2),
+        0 0 60px rgba(16, 185, 129, 0.1),
+        inset 0 0 30px rgba(16, 185, 129, 0.05);
 }
 
+/* Blue Active */
 .game-box.mode-active.jackpot-box {
-    border: 2px solid var(--accent-blue);
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    border: 2px solid rgba(59, 130, 246, 0.5);
+    box-shadow:
+        0 0 30px rgba(59, 130, 246, 0.2),
+        0 0 60px rgba(59, 130, 246, 0.1),
+        inset 0 0 30px rgba(59, 130, 246, 0.05);
 }
 
 .jackpot-item.disabled {

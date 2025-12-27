@@ -1,0 +1,73 @@
+export const zh = {
+    // App
+    app: {
+        title: 'MacroBet',
+        subtitle: '预测市场',
+    },
+
+    // Navigation
+    nav: {
+        dashboard: '仪表盘',
+        calendar: '日历',
+        markets: '市场',
+        portfolio: '投资组合',
+    },
+
+    // Shockwave Panel
+    shockwave: {
+        live: '直播',
+        title: '冲击波',
+        expected: '预期值',
+        basePrice: '基准价格',
+        marketStatus: '市场状态',
+
+        // Status
+        betting: '下注中',
+        locked: '已锁定',
+        settling: '结算中',
+        settled: '已结算',
+
+        // Data Sniper
+        dataSniper: '数据狙击手',
+        pariMutuel: '同注分彩',
+        dovish: '鸽派',
+        neutral: '中性',
+        hawkish: '鹰派',
+        poolShare: '奖池份额',
+
+        // Volatility Hunter
+        volatilityHunter: '波动猎手',
+        calm: '平静',
+        tsunami: '海啸',
+        calmDesc: '< $200 波动',
+        tsunamiDesc: '> $1000 波动',
+
+        // Jackpot
+        jackpot: '头奖',
+        potential: '100倍潜力',
+
+        // Footer
+        lockPhase: '锁定阶段开始于',
+        noCancel: '锁定后不可取消',
+        confirmBets: '确认冲击波下注',
+        bettingLocked: '下注已锁定',
+        clearSelection: '清除选择',
+    },
+
+    // Common
+    common: {
+        loading: '加载中...',
+        error: '错误',
+        retry: '重试',
+        confirm: '确认',
+        cancel: '取消',
+        yes: '是',
+        no: '否',
+    },
+
+    // Language
+    language: {
+        en: 'EN',
+        zh: '中文',
+    },
+};
