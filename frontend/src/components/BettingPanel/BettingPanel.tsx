@@ -44,7 +44,7 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
                             >
                                 <div className="card-top">
                                     <span className="range">{bet.rangeLabel}</span>
-                                    <span className="odds">x{bet.odds.toFixed(2)}</span>
+                                    <span className="odds">x{(bet.odds ?? 0).toFixed(2)}</span>
                                 </div>
                                 <div className="card-bottom">
                                     <span className="win-rate">Win Rate: {bet.historicalWinRate}%</span>
@@ -69,7 +69,7 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
                             >
                                 <div className="card-top">
                                     <span className="range">{bet.rangeLabel}</span>
-                                    <span className="odds">x{bet.odds.toFixed(2)}</span>
+                                    <span className="odds">x{(bet.odds ?? 0).toFixed(2)}</span>
                                 </div>
                                 <div className="card-bottom">
                                     <span className="win-rate">Win Rate: {bet.historicalWinRate}%</span>
