@@ -41,11 +41,15 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
 
     const handleSelect = (mode: string, optionId: string) => {
         if (isLocked) return;
-        // Only allow selection within the active mode, or set a new active mode
-        if (activeMode && activeMode !== mode) return;
 
-        setActiveMode(mode);
-        setSelectedOptions(prev => ({ ...prev, [mode]: optionId }));
+        // If switching to a different mode, clear previous selection and set new mode
+        if (activeMode !== mode) {
+            setActiveMode(mode);
+            setSelectedOptions({ [mode]: optionId });
+        } else {
+            // Same mode, just update the option
+            setSelectedOptions(prev => ({ ...prev, [mode]: optionId }));
+        }
     };
 
     const clearSelection = () => {
@@ -108,7 +112,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                                 key={opt.id}
                                 className={`option-btn ${opt.rangeLabel.toLowerCase()} ${selectedOptions['sniper'] === opt.id ? 'active' : ''}`}
                                 onClick={() => handleSelect('sniper', opt.id)}
-                                disabled={isLocked || isModeDisabled('sniper')}
+                                disabled={isLocked}
                             >
                                 {opt.rangeLabel === 'DOVISH' && <TrendingUp size={16} />}
                                 {opt.rangeLabel === 'HAWKISH' && <TrendingDown size={16} />}
@@ -134,7 +138,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                                 key={opt.id}
                                 className={`vol-btn ${selectedOptions['vol'] === opt.id ? 'active' : ''}`}
                                 onClick={() => handleSelect('vol', opt.id)}
-                                disabled={isLocked || isModeDisabled('vol')}
+                                disabled={isLocked}
                             >
                                 <span className="vol-lab">{opt.rangeLabel}</span>
                                 <span className="vol-sub">
@@ -156,8 +160,8 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                         {jackpotOptions.map(opt => (
                             <div
                                 key={opt.id}
-                                className={`jackpot-item ${selectedOptions['jackpot'] === opt.id ? 'active' : ''} ${isModeDisabled('jackpot') ? 'disabled' : ''}`}
-                                onClick={() => !isModeDisabled('jackpot') && handleSelect('jackpot', opt.id)}
+                                className={`jackpot-item ${selectedOptions['jackpot'] === opt.id ? 'active' : ''}`}
+                                onClick={() => handleSelect('jackpot', opt.id)}
                             >
                                 <span>{opt.rangeLabel}</span>
                                 <span className="odds-badge">{opt.odds}x</span>

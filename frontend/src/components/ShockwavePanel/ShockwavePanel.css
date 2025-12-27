@@ -401,9 +401,14 @@
 /* Exclusive Mode Selection Styles */
 .game-box.mode-disabled {
     opacity: 0.4;
-    pointer-events: none;
     filter: grayscale(0.8);
     transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.game-box.mode-disabled:hover {
+    opacity: 0.6;
+    filter: grayscale(0.5);
 }
 
 .game-box.mode-active {
