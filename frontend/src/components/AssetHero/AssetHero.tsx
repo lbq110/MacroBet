@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Asset } from '../../types';
+import { useI18n } from '../../i18n';
 import './AssetHero.css';
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
@@ -16,6 +17,7 @@ const MOCK_TREND = [
 ];
 
 export const AssetHero: React.FC<AssetHeroProps> = ({ asset }) => {
+    const { t } = useI18n();
     const isPositive = asset.change24h >= 0;
 
     return (
@@ -30,7 +32,7 @@ export const AssetHero: React.FC<AssetHeroProps> = ({ asset }) => {
                         <div className="live-status">
                             <span className="pulse-dot"></span>
                             <Activity size={12} />
-                            <span>Live Market Data</span>
+                            <span>{t.assetHero.liveMarketData}</span>
                         </div>
                     </div>
                 </div>
@@ -72,20 +74,19 @@ export const AssetHero: React.FC<AssetHeroProps> = ({ asset }) => {
 
                 <div className="asset-stats">
                     <div className="stat-item">
-                        <span className="stat-label">Market Cap</span>
+                        <span className="stat-label">{t.assetHero.marketCap}</span>
                         <span className="stat-value">$1.2T</span>
                     </div>
                     <div className="stat-item">
-                        <span className="stat-label">Volume (24h)</span>
+                        <span className="stat-label">{t.assetHero.volume24h}</span>
                         <span className="stat-value">$45.8B</span>
                     </div>
                     <div className="stat-item">
-                        <span className="stat-label">Volatility</span>
-                        <span className="stat-value high">High</span>
+                        <span className="stat-label">{t.assetHero.volatility}</span>
+                        <span className="stat-value high">{t.assetHero.high}</span>
                     </div>
                 </div>
             </div>
         </div>
     );
 };
-

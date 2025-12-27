@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { BetOption } from '../../types';
+import { useI18n } from '../../i18n';
 import { TrendingUp, TrendingDown, ArrowRight, ShieldCheck } from 'lucide-react';
 import './BettingPanel.css';
 
@@ -8,6 +9,7 @@ interface BettingPanelProps {
 }
 
 export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
+    const { t } = useI18n();
     const [selectedBetId, setSelectedBetId] = useState<string | null>(null);
 
     const upBets = bets.filter(b => b.direction === 'UP');
@@ -22,10 +24,10 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
     return (
         <div className="betting-panel glass-panel animate-fade-in">
             <div className="panel-header">
-                <h2>Prediction Market</h2>
+                <h2>{t.bettingPanel.title}</h2>
                 <div className="market-badge">
                     <ShieldCheck size={14} />
-                    <span>Settlement Guaranteed</span>
+                    <span>{t.bettingPanel.settlementGuaranteed}</span>
                 </div>
             </div>
 
@@ -33,7 +35,7 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
                 <div className="bet-group">
                     <div className="group-label up">
                         <TrendingUp size={16} />
-                        <span>Upward Movements</span>
+                        <span>{t.bettingPanel.upwardMovements}</span>
                     </div>
                     <div className="bet-cards">
                         {upBets.map(bet => (
@@ -47,7 +49,7 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
                                     <span className="odds">x{(bet.odds ?? 0).toFixed(2)}</span>
                                 </div>
                                 <div className="card-bottom">
-                                    <span className="win-rate">Win Rate: {bet.historicalWinRate}%</span>
+                                    <span className="win-rate">{t.bettingPanel.winRate}: {bet.historicalWinRate}%</span>
                                 </div>
                                 {isSelected(bet.id) && <div className="check-indicator"><ArrowRight size={14} /></div>}
                             </div>
@@ -58,7 +60,7 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
                 <div className="bet-group">
                     <div className="group-label down">
                         <TrendingDown size={16} />
-                        <span>Downward Movements</span>
+                        <span>{t.bettingPanel.downwardMovements}</span>
                     </div>
                     <div className="bet-cards">
                         {downBets.map(bet => (
@@ -72,7 +74,7 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
                                     <span className="odds">x{(bet.odds ?? 0).toFixed(2)}</span>
                                 </div>
                                 <div className="card-bottom">
-                                    <span className="win-rate">Win Rate: {bet.historicalWinRate}%</span>
+                                    <span className="win-rate">{t.bettingPanel.winRate}: {bet.historicalWinRate}%</span>
                                 </div>
                                 {isSelected(bet.id) && <div className="check-indicator"><ArrowRight size={14} /></div>}
                             </div>
@@ -82,12 +84,11 @@ export const BettingPanel: React.FC<BettingPanelProps> = ({ bets }) => {
             </div>
 
             <div className="bet-action">
-                <div className="odds-disclaimer">Odds fluctuate based on real-time market sentiment.</div>
+                <div className="odds-disclaimer">{t.bettingPanel.oddsFluctuate}</div>
                 <button className={`confirm-bet-btn ${selectedBetId ? 'ready' : ''}`} disabled={!selectedBetId}>
-                    {selectedBetId ? 'Place Prediction' : 'Select Direction'}
+                    {selectedBetId ? t.bettingPanel.placePrediction : t.bettingPanel.selectDirection}
                 </button>
             </div>
         </div>
     );
 };
-

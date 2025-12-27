@@ -247,3 +247,129 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
+
+/* Three-column Reactions Grid */
+.reactions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+}
+
+.reaction-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-regular);
+    border-radius: 12px;
+    padding: var(--space-4);
+    transition: all 0.2s ease;
+}
+
+.reaction-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+}
+
+.reaction-header {
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.reaction-type {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.reaction-type.above-expectation {
+    color: var(--accent-green);
+}
+
+.reaction-type.in-line {
+    color: var(--accent-blue);
+}
+
+.reaction-type.below-expectation {
+    color: var(--accent-red);
+}
+
+.reaction-stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.up-down-row {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: var(--space-2);
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.stat-up {
+    color: var(--text-tertiary);
+}
+
+.stat-down {
+    color: var(--text-tertiary);
+}
+
+.stat-pct {
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.stat-pct.up {
+    color: var(--status-up);
+}
+
+.stat-pct.down {
+    color: var(--status-down);
+}
+
+.mini-bar {
+    display: flex;
+    height: 6px;
+    background: var(--bg-primary);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mini-bar .fill.up {
+    background: var(--status-up);
+}
+
+.mini-bar .fill.down {
+    background: var(--status-down);
+}
+
+.stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+}
+
+.stat-row .stat-item {
+    display: flex;
+    justify-content: space-between;
+    background: var(--bg-surface);
+    padding: var(--space-2) var(--space-3);
+    border-radius: 6px;
+    font-size: 0.75rem;
+}
+
+.stat-row .label {
+    color: var(--text-muted);
+}
+
+.stat-row .value {
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .reactions-grid {
+        grid-template-columns: 1fr;
+    }
+}

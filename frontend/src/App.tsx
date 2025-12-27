@@ -57,7 +57,7 @@ function App() {
         <div style={{ marginTop: 'auto' }}>
           <button className="nav-btn">
             <Settings size={20} />
-            <span>Settings</span>
+            <span>{t.nav.settings}</span>
           </button>
         </div>
       </aside>
@@ -100,7 +100,7 @@ function App() {
         </main>
 
         <footer className="footer">
-          <p>Market data is for demonstration purposes only. &copy; 2025 MacroBet Inc.</p>
+          <p>{t.footer.disclaimer} {t.footer.copyright}</p>
         </footer>
       </div>
     </div>

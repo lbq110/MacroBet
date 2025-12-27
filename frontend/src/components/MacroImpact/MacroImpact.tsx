@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { MacroIndicator, ImpactType } from '../../types';
+import { useI18n } from '../../i18n';
 
-import { MacroStatsChart } from './MacroStatsChart';
 import './MacroImpact.css';
 import { ChevronDown, ChevronUp, Star, Calendar, Info } from 'lucide-react';
 
@@ -10,17 +10,19 @@ interface MacroImpactProps {
 }
 
 export const MacroImpact: React.FC<MacroImpactProps> = ({ macroData }) => {
+    const { t } = useI18n();
     const [expandedId, setExpandedId] = useState<string | null>(macroData[0]?.id || null);
-    const [activeTab, setActiveTab] = useState<Record<string, ImpactType>>({});
 
     const toggleExpand = (id: string) => {
         setExpandedId(expandedId === id ? null : id);
     };
 
-    const getActiveTab = (id: string) => activeTab[id] || 'Above Expectation';
-
-    const handleTabChange = (id: string, tab: ImpactType) => {
-        setActiveTab(prev => ({ ...prev, [id]: tab }));
+    // Category translation map
+    const categoryTranslations: Record<string, string> = {
+        'INFLATION': t.macroImpact.inflation,
+        'EMPLOYMENT': t.macroImpact.employment,
+        'MONETARY POLICY': t.macroImpact.monetaryPolicy,
+        'GROWTH': t.macroImpact.growth,
     };
 
     // Grouping by category
@@ -33,21 +35,19 @@ export const MacroImpact: React.FC<MacroImpactProps> = ({ macroData }) => {
     return (
         <div className="macro-impact-section glass-panel">
             <div className="section-header">
-                <h2>Macro Data Impact</h2>
+                <h2>{t.macroImpact.title}</h2>
                 <div className="info-badge">
                     <Info size={14} />
-                    <span>Historical Odds Only</span>
+                    <span>{t.macroImpact.historicalOdds}</span>
                 </div>
             </div>
 
             {Object.entries(groupedData).map(([category, items]) => (
                 <div key={category} className="macro-category-group">
-                    <h4 className="category-label">{category}</h4>
+                    <h4 className="category-label">{categoryTranslations[category] || category}</h4>
                     <div className="macro-list">
                         {items.map(item => {
                             const isExpanded = expandedId === item.id;
-                            const currentTab = getActiveTab(item.id);
-                            const currentReaction = item.reactions[currentTab];
 
                             return (
                                 <div key={item.id} className={`macro-item ${isExpanded ? 'expanded' : ''}`}>
@@ -75,20 +75,43 @@ export const MacroImpact: React.FC<MacroImpactProps> = ({ macroData }) => {
 
                                     {isExpanded && (
                                         <div className="macro-content">
-                                            <div className="impact-tabs">
-                                                {(['Above Expectation', 'In Line', 'Below Expectation'] as ImpactType[]).map(tab => (
-                                                    <button
-                                                        key={tab}
-                                                        className={`tab-btn ${currentTab === tab ? 'active' : ''}`}
-                                                        onClick={() => handleTabChange(item.id, tab)}
-                                                    >
-                                                        {tab}
-                                                    </button>
-                                                ))}
-                                            </div>
-
-                                            <div className="reaction-view">
-                                                <MacroStatsChart reaction={currentReaction} />
+                                            <div className="reactions-grid">
+                                                {(['Above Expectation', 'In Line', 'Below Expectation'] as ImpactType[]).map(type => {
+                                                    const reaction = item.reactions[type];
+                                                    const typeLabel = type === 'Above Expectation' ? t.macroImpact.aboveExpectation :
+                                                        type === 'In Line' ? t.macroImpact.inLine : t.macroImpact.belowExpectation;
+                                                    return (
+                                                        <div key={type} className="reaction-card">
+                                                            <div className="reaction-header">
+                                                                <span className={`reaction-type ${type.toLowerCase().replace(' ', '-')}`}>
+                                                                    {typeLabel}
+                                                                </span>
+                                                            </div>
+                                                            <div className="reaction-stats">
+                                                                <div className="up-down-row">
+                                                                    <span className="stat-up">{reaction.upCount} {t.macroImpact.up}</span>
+                                                                    <span className="stat-pct up">{reaction.upProbability}%</span>
+                                                                    <span className="stat-down">{reaction.downCount} {t.macroImpact.down}</span>
+                                                                    <span className="stat-pct down">{reaction.downProbability}%</span>
+                                                                </div>
+                                                                <div className="mini-bar">
+                                                                    <div className="fill up" style={{ width: `${reaction.upProbability}%` }} />
+                                                                    <div className="fill down" style={{ width: `${reaction.downProbability}%` }} />
+                                                                </div>
+                                                                <div className="stat-row">
+                                                                    <div className="stat-item">
+                                                                        <span className="label">{t.macroImpact.vol}</span>
+                                                                        <span className="value">±{reaction.volatilityAmplitude}%</span>
+                                                                    </div>
+                                                                    <div className="stat-item">
+                                                                        <span className="label">{t.macroImpact.size}</span>
+                                                                        <span className="value">{reaction.sampleSize}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     )}
@@ -101,5 +124,3 @@ export const MacroImpact: React.FC<MacroImpactProps> = ({ macroData }) => {
         </div>
     );
 };
-
-

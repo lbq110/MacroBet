@@ -11,6 +11,7 @@ export const zh = {
         calendar: '日历',
         markets: '市场',
         portfolio: '投资组合',
+        settings: '设置',
     },
 
     // Shockwave Panel
@@ -54,6 +55,47 @@ export const zh = {
         clearSelection: '清除选择',
     },
 
+    // Macro Impact
+    macroImpact: {
+        title: '宏观数据影响',
+        historicalOdds: '仅限历史数据',
+        aboveExpectation: '高于预期',
+        inLine: '符合预期',
+        belowExpectation: '低于预期',
+        up: '上涨',
+        down: '下跌',
+        vol: '波动',
+        size: '样本',
+        // Categories
+        inflation: '通胀',
+        employment: '就业',
+        monetaryPolicy: '货币政策',
+        growth: '增长',
+    },
+
+    // Betting Panel
+    bettingPanel: {
+        title: '预测市场',
+        settlementGuaranteed: '保证结算',
+        upwardMovements: '上行区间',
+        downwardMovements: '下行区间',
+        winRate: '胜率',
+        oddsFluctuate: '赔率根据市场情绪实时波动。',
+        placePrediction: '确认预测',
+        selectDirection: '选择方向',
+    },
+
+    // Asset Hero
+    assetHero: {
+        liveMarketData: '实时行情',
+        marketCap: '市值',
+        volume24h: '24H成交量',
+        volatility: '波动率',
+        high: '高',
+        medium: '中',
+        low: '低',
+    },
+
     // Common
     common: {
         loading: '加载中...',
@@ -63,6 +105,12 @@ export const zh = {
         cancel: '取消',
         yes: '是',
         no: '否',
+    },
+
+    // Footer
+    footer: {
+        disclaimer: '市场数据仅供演示用途。',
+        copyright: '© 2025 MacroBet Inc.',
     },
 
     // Language
