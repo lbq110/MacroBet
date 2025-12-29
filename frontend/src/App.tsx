@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { MOCK_ASSETS, MOCK_MACRO_DATA, MOCK_BETS, MOCK_SHOCKWAVE_EVENT } from './data/mockData';
 import { useI18n } from './i18n';
+import { useAuth } from './auth/AuthContext';
 
 import { AssetHero } from './components/AssetHero/AssetHero';
 import { MacroImpact } from './components/MacroImpact/MacroImpact';
@@ -15,7 +16,9 @@ import {
   LayoutDashboard,
   Settings,
   TrendingUp,
-  Wallet
+  Wallet,
+  LogIn,
+  LogOut
 } from 'lucide-react';
 import './App.css';
 
@@ -25,6 +28,7 @@ function App() {
   const [view, setView] = useState<ViewType>('detail');
   const [activeAssetId, setActiveAssetId] = useState<string>(MOCK_ASSETS[0].id);
   const { t } = useI18n();
+  const { user, login, logout, isLoading } = useAuth();
 
   const activeAsset = MOCK_ASSETS.find(a => a.id === activeAssetId) || MOCK_ASSETS[0];
 
@@ -84,9 +88,24 @@ function App() {
           </div>
           <div className="header-right">
             <LanguageSwitcher />
-            <div className="user-profile">
-              <div className="avatar">JD</div>
-            </div>
+            {isLoading ? (
+              <div className="user-profile">
+                <div className="avatar loading">...</div>
+              </div>
+            ) : user ? (
+              <div className="user-profile-logged">
+                <img src={user.profileImageUrl} alt={user.name} className="avatar-img" />
+                <span className="username">@{user.username}</span>
+                <button className="logout-btn" onClick={logout} title="Logout">
+                  <LogOut size={16} />
+                </button>
+              </div>
+            ) : (
+              <button className="login-x-btn" onClick={login}>
+                <LogIn size={16} />
+                <span>Login with X</span>
+              </button>
+            )}
           </div>
         </header>
 

@@ -53,6 +53,7 @@ export const en = {
         confirmBets: 'CONFIRM SHOCKWAVE BETS',
         bettingLocked: 'BETTING LOCKED',
         clearSelection: 'Clear Selection',
+        share: 'Share',
     },
 
     // Macro Impact

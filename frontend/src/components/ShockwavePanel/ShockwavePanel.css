@@ -533,6 +533,36 @@
     margin-top: var(--space-2);
 }
 
+.footer-actions {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+}
+
+.share-x-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(29, 161, 242, 0.1);
+    border: 1px solid rgba(29, 161, 242, 0.3);
+    border-radius: 10px;
+    color: #1da1f2;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.share-x-btn:hover {
+    background: rgba(29, 161, 242, 0.2);
+    border-color: rgba(29, 161, 242, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(29, 161, 242, 0.25);
+}
+
 .info-tip {
     display: flex;
     align-items: center;
@@ -543,7 +573,7 @@
 }
 
 .bet-btn-shockwave {
-    width: 100%;
+    flex: 1;
     padding: var(--space-4);
     background: var(--bg-surface);
     border: none;

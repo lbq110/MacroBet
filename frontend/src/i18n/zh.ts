@@ -53,6 +53,7 @@ export const zh = {
         confirmBets: '确认冲击波下注',
         bettingLocked: '下注已锁定',
         clearSelection: '清除选择',
+        share: '分享',
     },
 
     // Macro Impact

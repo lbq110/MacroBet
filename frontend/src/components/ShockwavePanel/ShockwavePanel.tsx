@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Target, Zap, Trophy, Timer, AlertCircle, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Target, Zap, Trophy, Timer, AlertCircle, TrendingUp, TrendingDown, Minus, Share2 } from 'lucide-react';
 import type { ShockwaveEvent } from '../../types';
 import { EventStatus, ShockwaveSubMode } from '../../types';
 import { useI18n } from '../../i18n';
@@ -57,6 +57,16 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
     const clearSelection = () => {
         setActiveMode(null);
         setSelectedOptions({});
+    };
+
+    const handleShareToX = () => {
+        const prediction = activeMode
+            ? `My prediction: ${activeMode.toUpperCase()}`
+            : 'Check out this CPI Shockwave event!';
+        const text = `🚀 CPI Shockwave on MacroBet\n\n📊 Expected: ${event.expectedValue}\n⏰ Release: ${new Date(event.releaseTime).toLocaleString()}\n\n${prediction}\n\n#MacroBet #CPI #Trading`;
+        const url = 'https://macrobet.io';
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+        window.open(twitterUrl, '_blank', 'width=550,height=420');
     };
 
     const isModeDisabled = (mode: string) => {
@@ -204,17 +214,23 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                     <AlertCircle size={14} />
                     <span>{t.shockwave.lockPhase} {formatTime(timeLeft - 900 < 0 ? 0 : timeLeft - 900)}. {t.shockwave.noCancel}</span>
                 </div>
-                {activeMode && (
-                    <button className="clear-selection-btn" onClick={clearSelection}>
-                        {t.shockwave.clearSelection}
+                <div className="footer-actions">
+                    {activeMode && (
+                        <button className="clear-selection-btn" onClick={clearSelection}>
+                            {t.shockwave.clearSelection}
+                        </button>
+                    )}
+                    <button className="share-x-btn" onClick={handleShareToX} title="Share to X">
+                        <Share2 size={16} />
+                        <span>{t.shockwave.share}</span>
                     </button>
-                )}
-                <button
-                    className={`bet-btn-shockwave ${Object.keys(selectedOptions).length > 0 ? 'ready' : ''}`}
-                    disabled={isLocked || Object.keys(selectedOptions).length === 0}
-                >
-                    {isLocked ? t.shockwave.bettingLocked : t.shockwave.confirmBets}
-                </button>
+                    <button
+                        className={`bet-btn-shockwave ${Object.keys(selectedOptions).length > 0 ? 'ready' : ''}`}
+                        disabled={isLocked || Object.keys(selectedOptions).length === 0}
+                    >
+                        {isLocked ? t.shockwave.bettingLocked : t.shockwave.confirmBets}
+                    </button>
+                </div>
             </div>
         </div>
     );
