@@ -193,7 +193,7 @@
 }
 
 .footer {
-  padding: var(--space-8);
+  padding: var(--space-4) var(--space-6);
   text-align: center;
   color: var(--text-muted);
   font-size: 0.75rem;
