@@ -62,9 +62,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setIsLoading(false);
     }, []);
 
-    // Handle OAuth callback
+    // Handle OAuth callback - with flag to prevent double execution in React Strict Mode
     useEffect(() => {
+        let isProcessing = false;
+
         const handleCallback = async () => {
+            if (isProcessing) return;
+
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
             const state = urlParams.get('state');
@@ -72,6 +76,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             const codeVerifier = sessionStorage.getItem('code_verifier');
 
             if (code && state && state === savedState && codeVerifier) {
+                isProcessing = true;
+
+                // Immediately clear session storage to prevent double execution
+                sessionStorage.removeItem('oauth_state');
+                sessionStorage.removeItem('code_verifier');
+
+                // Clean URL immediately
+                window.history.replaceState({}, '', window.location.pathname);
+
                 try {
                     // Call backend to exchange code for tokens and get user profile
                     const apiUrl = window.location.hostname === 'localhost'
@@ -97,11 +110,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     }
                 } catch (error) {
                     console.error('Auth error:', error);
-                } finally {
-                    sessionStorage.removeItem('oauth_state');
-                    sessionStorage.removeItem('code_verifier');
-                    // Clean URL
-                    window.history.replaceState({}, '', window.location.pathname);
                 }
             }
         };
