@@ -97,6 +97,26 @@ export const en = {
         low: 'Low',
     },
 
+    // Portfolio
+    portfolio: {
+        title: 'Portfolio',
+        today: 'Today',
+        withdraw: 'Withdraw',
+        profitLoss: 'Profit/Loss',
+        pastDay: 'Past Day',
+        positions: 'Positions',
+        openOrders: 'Open orders',
+        history: 'History',
+        search: 'Search',
+        currentValue: 'Current value',
+        market: 'MARKET',
+        avgToNow: 'AVG → NOW',
+        bet: 'BET',
+        toWin: 'TO WIN',
+        value: 'VALUE',
+        noPositions: 'No positions found.',
+    },
+
     // Common
     common: {
         loading: 'Loading...',

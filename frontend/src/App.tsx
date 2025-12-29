@@ -8,6 +8,7 @@ import { BettingPanel } from './components/BettingPanel/BettingPanel';
 import { ShockwavePanel } from './components/ShockwavePanel/ShockwavePanel';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { Calendar } from './pages/Calendar/Calendar';
+import { Portfolio } from './pages/Portfolio/Portfolio';
 import {
   BarChart3,
   Calendar as CalendarIcon,
@@ -18,8 +19,10 @@ import {
 } from 'lucide-react';
 import './App.css';
 
+type ViewType = 'detail' | 'calendar' | 'portfolio';
+
 function App() {
-  const [view, setView] = useState<'detail' | 'calendar'>('detail');
+  const [view, setView] = useState<ViewType>('detail');
   const [activeAssetId, setActiveAssetId] = useState<string>(MOCK_ASSETS[0].id);
   const { t } = useI18n();
 
@@ -48,7 +51,10 @@ function App() {
             <TrendingUp size={20} />
             <span>{t.nav.markets}</span>
           </button>
-          <button className="nav-btn">
+          <button
+            className={`nav-btn ${view === 'portfolio' ? 'active' : ''}`}
+            onClick={() => setView('portfolio')}
+          >
             <Wallet size={20} />
             <span>{t.nav.portfolio}</span>
           </button>
@@ -94,8 +100,10 @@ function App() {
                 <BettingPanel bets={MOCK_BETS} />
               </div>
             </div>
-          ) : (
+          ) : view === 'calendar' ? (
             <Calendar />
+          ) : (
+            <Portfolio />
           )}
         </main>
 
@@ -108,4 +116,3 @@ function App() {
 }
 
 export default App;
-

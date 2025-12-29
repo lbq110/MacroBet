@@ -97,6 +97,26 @@ export const zh = {
         low: '低',
     },
 
+    // Portfolio
+    portfolio: {
+        title: '投资组合',
+        today: '今日',
+        withdraw: '提现',
+        profitLoss: '盈亏',
+        pastDay: '过去一天',
+        positions: '持仓',
+        openOrders: '未结订单',
+        history: '历史记录',
+        search: '搜索',
+        currentValue: '当前价值',
+        market: '市场',
+        avgToNow: '均价 → 现价',
+        bet: '下注',
+        toWin: '可赢',
+        value: '价值',
+        noPositions: '暂无持仓记录。',
+    },
+
     // Common
     common: {
         loading: '加载中...',
