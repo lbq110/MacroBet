@@ -2,8 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 /* Stats Row */
@@ -168,8 +167,8 @@
 }
 
 .positions-tabs {
-    display: flex;
-    gap: var(--space-4);
+    display: inline-flex;
+    gap: var(--space-5);
     padding: var(--space-4) var(--space-5);
     border-bottom: 1px solid var(--border-regular);
 }
@@ -184,6 +183,7 @@
     cursor: pointer;
     position: relative;
     transition: color 0.2s;
+    white-space: nowrap;
 }
 
 .positions-tabs .tab-btn.active {
