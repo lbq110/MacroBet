@@ -64,28 +64,49 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // Handle OAuth callback
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        const state = urlParams.get('state');
-        const savedState = sessionStorage.getItem('oauth_state');
+        const handleCallback = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const state = urlParams.get('state');
+            const savedState = sessionStorage.getItem('oauth_state');
+            const codeVerifier = sessionStorage.getItem('code_verifier');
 
-        if (code && state && state === savedState) {
-            // For demo purposes, we'll simulate a successful login
-            // In production, you would exchange the code for tokens via backend
-            const demoUser: User = {
-                id: 'demo_user',
-                username: 'macrobet_user',
-                name: 'MacroBet User',
-                profileImageUrl: 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png'
-            };
-            setUser(demoUser);
-            localStorage.setItem('macrobet_user', JSON.stringify(demoUser));
-            sessionStorage.removeItem('oauth_state');
-            sessionStorage.removeItem('code_verifier');
+            if (code && state && state === savedState && codeVerifier) {
+                try {
+                    // Call backend to exchange code for tokens and get user profile
+                    const apiUrl = window.location.hostname === 'localhost'
+                        ? 'http://localhost:3000/auth/twitter/callback'
+                        : 'https://macrobet-production.up.railway.app/auth/twitter/callback';
 
-            // Clean URL
-            window.history.replaceState({}, '', window.location.pathname);
-        }
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            code,
+                            redirectUri: REDIRECT_URI,
+                            codeVerifier,
+                        }),
+                    });
+
+                    if (response.ok) {
+                        const userData: User = await response.json();
+                        setUser(userData);
+                        localStorage.setItem('macrobet_user', JSON.stringify(userData));
+                    } else {
+                        console.error('Auth failed:', await response.text());
+                    }
+                } catch (error) {
+                    console.error('Auth error:', error);
+                } finally {
+                    sessionStorage.removeItem('oauth_state');
+                    sessionStorage.removeItem('code_verifier');
+                    // Clean URL
+                    window.history.replaceState({}, '', window.location.pathname);
+                }
+            }
+        };
+
+        handleCallback();
     }, []);
 
     const login = useCallback(async () => {

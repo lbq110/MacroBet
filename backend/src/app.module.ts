@@ -6,6 +6,7 @@ import { UsersModule } from './modules/users/users.module';
 import { EventsModule } from './modules/events/events.module';
 import { BetsModule } from './modules/bets/bets.module';
 import { SettlementModule } from './modules/settlement/settlement.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { User } from './modules/users/user.entity';
 import { MacroEvent } from './modules/events/event.entity';
 import { BetOption } from './modules/events/bet-option.entity';
@@ -72,6 +73,7 @@ import { Bet } from './modules/bets/bet.entity';
     EventsModule,
     BetsModule,
     SettlementModule,
+    AuthModule,
   ],
 })
 export class AppModule { }
