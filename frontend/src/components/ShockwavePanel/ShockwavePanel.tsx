@@ -214,21 +214,27 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                     <AlertCircle size={14} />
                     <span>{t.shockwave.lockPhase} {formatTime(timeLeft - 900 < 0 ? 0 : timeLeft - 900)}. {t.shockwave.noCancel}</span>
                 </div>
-                <div className="footer-actions">
-                    {activeMode && (
-                        <button className="clear-selection-btn" onClick={clearSelection}>
-                            {t.shockwave.clearSelection}
-                        </button>
-                    )}
-                    <button className="share-x-btn" onClick={handleShareToX} title="Share to X">
-                        <Share2 size={16} />
-                        <span>{t.shockwave.share}</span>
-                    </button>
+
+                {/* Primary Action Row */}
+                <div className="footer-primary-row">
                     <button
                         className={`bet-btn-shockwave ${Object.keys(selectedOptions).length > 0 ? 'ready' : ''}`}
                         disabled={isLocked || Object.keys(selectedOptions).length === 0}
                     >
                         {isLocked ? t.shockwave.bettingLocked : t.shockwave.confirmBets}
+                    </button>
+                </div>
+
+                {/* Secondary Actions Row */}
+                <div className="footer-secondary-row">
+                    {activeMode && (
+                        <button className="clear-selection-link" onClick={clearSelection}>
+                            ✕ {t.shockwave.clearSelection}
+                        </button>
+                    )}
+                    <button className="share-x-btn-minimal" onClick={handleShareToX} title="Share to X">
+                        <Share2 size={16} />
+                        <span>{t.shockwave.share}</span>
                     </button>
                 </div>
             </div>

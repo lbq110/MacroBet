@@ -525,42 +525,14 @@
     text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
 
-/* Footer */
+/* Footer - Professional UI Design */
 .shockwave-footer {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
-    margin-top: var(--space-2);
-}
-
-.footer-actions {
-    display: flex;
-    gap: var(--space-3);
-    align-items: center;
-}
-
-.share-x-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-4);
-    background: rgba(29, 161, 242, 0.1);
-    border: 1px solid rgba(29, 161, 242, 0.3);
-    border-radius: 10px;
-    color: #1da1f2;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-    white-space: nowrap;
-}
-
-.share-x-btn:hover {
-    background: rgba(29, 161, 242, 0.2);
-    border-color: rgba(29, 161, 242, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(29, 161, 242, 0.25);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .info-tip {
@@ -572,34 +544,120 @@
     justify-content: center;
 }
 
+/* Primary Action Row - Full Width CTA */
+.footer-primary-row {
+    width: 100%;
+}
+
 .bet-btn-shockwave {
-    flex: 1;
-    padding: var(--space-4);
-    background: var(--bg-surface);
-    border: none;
-    border-radius: 12px;
+    width: 100%;
+    padding: var(--space-4) var(--space-6);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
     color: var(--text-muted);
-    font-weight: 800;
-    font-size: 16px;
-    letter-spacing: 0.05em;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.08em;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bet-btn-shockwave.ready {
-    background: linear-gradient(135deg, var(--accent-red), #991b1b);
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #b91c1c 100%);
+    border: none;
     color: white;
-    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+    box-shadow:
+        0 4px 20px rgba(239, 68, 68, 0.35),
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .bet-btn-shockwave:hover:not(:disabled).ready {
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(239, 68, 68, 0.5);
+    box-shadow:
+        0 8px 30px rgba(239, 68, 68, 0.45),
+        0 2px 6px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.bet-btn-shockwave:active:not(:disabled).ready {
+    transform: translateY(0);
 }
 
 .bet-btn-shockwave:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+}
+
+/* Secondary Actions Row */
+.footer-secondary-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-6);
+    padding-top: var(--space-2);
+}
+
+/* Clear Selection - Subtle Link Style */
+.clear-selection-link {
+    background: none;
+    border: none;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0.7;
+}
+
+.clear-selection-link:hover {
+    color: var(--text-secondary);
+    opacity: 1;
+}
+
+/* Share Button - Minimal & Elegant */
+.share-x-btn-minimal {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: none;
+    border: none;
+    padding: var(--space-2) var(--space-3);
+    color: #1da1f2;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0.85;
+}
+
+.share-x-btn-minimal:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.share-x-btn-minimal svg {
+    transition: transform 0.2s;
+}
+
+.share-x-btn-minimal:hover svg {
+    transform: scale(1.1);
+}
+
+/* Legacy Support - Remove if not needed */
+.footer-actions {
+    display: none;
+}
+
+.share-x-btn {
+    display: none;
+}
+
+.clear-selection-btn {
+    display: none;
 }
 
 /* Exclusive Mode Selection Styles - Premium */
@@ -653,23 +711,4 @@
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
-}
-
-.clear-selection-btn {
-    width: 100%;
-    padding: var(--space-3);
-    background: transparent;
-    border: 1px solid var(--border-subtle);
-    border-radius: 8px;
-    color: var(--text-tertiary);
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.clear-selection-btn:hover {
-    border-color: var(--text-secondary);
-    color: var(--text-secondary);
-    background: rgba(255, 255, 255, 0.05);
 }
