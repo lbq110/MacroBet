@@ -10,6 +10,7 @@ import { ShockwavePanel } from './components/ShockwavePanel/ShockwavePanel';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { Calendar } from './pages/Calendar/Calendar';
 import { Portfolio } from './pages/Portfolio/Portfolio';
+import { CryptoBetting } from './pages/CryptoBetting/CryptoBetting';
 import {
   BarChart3,
   Calendar as CalendarIcon,
@@ -17,12 +18,13 @@ import {
   Settings,
   TrendingUp,
   Wallet,
+  Clock,
   LogIn,
   LogOut
 } from 'lucide-react';
 import './App.css';
 
-type ViewType = 'detail' | 'calendar' | 'portfolio';
+type ViewType = 'detail' | 'calendar' | 'portfolio' | 'crypto';
 
 function App() {
   const [view, setView] = useState<ViewType>('detail');
@@ -50,6 +52,13 @@ function App() {
           >
             <CalendarIcon size={20} />
             <span>{t.nav.calendar}</span>
+          </button>
+          <button
+            className={`nav-btn ${view === 'crypto' ? 'active' : ''}`}
+            onClick={() => setView('crypto')}
+          >
+            <Clock size={20} />
+            <span>BTC Up Or Down</span>
           </button>
           <button className="nav-btn">
             <TrendingUp size={20} />
@@ -121,6 +130,8 @@ function App() {
             </div>
           ) : view === 'calendar' ? (
             <Calendar />
+          ) : view === 'crypto' ? (
+            <CryptoBetting />
           ) : (
             <Portfolio />
           )}
