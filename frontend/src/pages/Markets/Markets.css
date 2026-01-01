@@ -28,11 +28,26 @@
 }
 
 /* Header */
+.markets-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
 .markets-header h1 {
     font-size: 1.75rem;
     font-weight: 700;
     color: var(--text-primary);
     margin: 0;
+}
+
+.timeframe-badge {
+    padding: var(--space-1) var(--space-3);
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
 }
 
 /* Category Filters */
@@ -120,26 +135,32 @@
     font-size: 1.25rem;
     font-weight: 700;
     flex-shrink: 0;
+    color: white;
 }
 
-.market-icon.btc {
+/* Category-specific icon colors */
+.market-icon.crypto {
     background: linear-gradient(135deg, #f7931a, #ffb347);
-    color: white;
 }
 
-.market-icon.eth {
-    background: linear-gradient(135deg, #627eea, #8b9ff0);
-    color: white;
+.market-icon.us-stocks {
+    background: linear-gradient(135deg, #10b981, #34d399);
 }
 
-.market-icon.sol {
-    background: linear-gradient(135deg, #9945ff, #14f195);
-    color: white;
+.market-icon.indices {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
 }
 
-.market-icon.xrp {
-    background: linear-gradient(135deg, #23292f, #4a5568);
-    color: white;
+.market-icon.hk-stocks {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+}
+
+.market-icon.commodities {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.market-icon.forex {
+    background: linear-gradient(135deg, #8b5cf6, #a78bfa);
 }
 
 .card-title {
