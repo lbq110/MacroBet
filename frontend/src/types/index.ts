@@ -2,6 +2,7 @@ export interface Asset {
   id: string;
   symbol: string;
   name: string;
+  category?: string; // Crypto, US Stocks, Indices, HK Stocks, Commodities, Forex
   currentPrice: number;
   change24h: number; // Percentage, e.g., 2.5 for +2.5%
   lastUpdated: string;

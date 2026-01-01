@@ -85,9 +85,36 @@ function App() {
               onChange={(e) => setActiveAssetId(e.target.value)}
               className="asset-dropdown"
             >
-              {MOCK_ASSETS.map(asset => (
-                <option key={asset.id} value={asset.id}>{asset.name} ({asset.symbol})</option>
-              ))}
+              <optgroup label="Crypto">
+                {MOCK_ASSETS.filter(a => a.category === 'Crypto').map(asset => (
+                  <option key={asset.id} value={asset.id}>{asset.name} ({asset.symbol})</option>
+                ))}
+              </optgroup>
+              <optgroup label="US Stocks">
+                {MOCK_ASSETS.filter(a => a.category === 'US Stocks').map(asset => (
+                  <option key={asset.id} value={asset.id}>{asset.name} ({asset.symbol})</option>
+                ))}
+              </optgroup>
+              <optgroup label="Indices">
+                {MOCK_ASSETS.filter(a => a.category === 'Indices').map(asset => (
+                  <option key={asset.id} value={asset.id}>{asset.name} ({asset.symbol})</option>
+                ))}
+              </optgroup>
+              <optgroup label="HK Stocks">
+                {MOCK_ASSETS.filter(a => a.category === 'HK Stocks').map(asset => (
+                  <option key={asset.id} value={asset.id}>{asset.name} ({asset.symbol})</option>
+                ))}
+              </optgroup>
+              <optgroup label="Commodities">
+                {MOCK_ASSETS.filter(a => a.category === 'Commodities').map(asset => (
+                  <option key={asset.id} value={asset.id}>{asset.name} ({asset.symbol})</option>
+                ))}
+              </optgroup>
+              <optgroup label="Forex">
+                {MOCK_ASSETS.filter(a => a.category === 'Forex').map(asset => (
+                  <option key={asset.id} value={asset.id}>{asset.name} ({asset.symbol})</option>
+                ))}
+              </optgroup>
             </select>
           </div>
           <div className="header-right">

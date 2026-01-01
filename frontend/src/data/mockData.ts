@@ -3,12 +3,49 @@ import { EventStatus, EventType, ShockwaveSubMode } from '../types';
 
 
 export const MOCK_ASSETS: Asset[] = [
-    { id: 'btc', symbol: 'BTC', name: 'Bitcoin', currentPrice: 64230.50, change24h: 2.34, lastUpdated: new Date().toISOString() },
-    { id: 'spx', symbol: 'SPX500', name: 'S&P 500', currentPrice: 5120.30, change24h: 0.45, lastUpdated: new Date().toISOString() },
-    { id: 'gold', symbol: 'XAU/USD', name: 'Gold Spot', currentPrice: 2340.50, change24h: -0.12, lastUpdated: new Date().toISOString() },
-    { id: 'dxy', symbol: 'DXY', name: 'US Dollar Index', currentPrice: 104.20, change24h: 0.05, lastUpdated: new Date().toISOString() },
-    { id: 'nvda', symbol: 'NVDA', name: 'NVIDIA', currentPrice: 890.45, change24h: 3.12, lastUpdated: new Date().toISOString() },
-    { id: 'us10y', symbol: 'US10Y', name: '10Y US Treasury', currentPrice: 4.32, change24h: 0.15, lastUpdated: new Date().toISOString() },
+    // Crypto
+    { id: 'btc', symbol: 'BTC', name: 'Bitcoin', category: 'Crypto', currentPrice: 94230.50, change24h: 2.34, lastUpdated: new Date().toISOString() },
+    { id: 'eth', symbol: 'ETH', name: 'Ethereum', category: 'Crypto', currentPrice: 3420.80, change24h: 1.56, lastUpdated: new Date().toISOString() },
+    { id: 'sol', symbol: 'SOL', name: 'Solana', category: 'Crypto', currentPrice: 198.45, change24h: 4.23, lastUpdated: new Date().toISOString() },
+
+    // US Stocks
+    { id: 'nvda', symbol: 'NVDA', name: 'NVIDIA', category: 'US Stocks', currentPrice: 890.45, change24h: 3.12, lastUpdated: new Date().toISOString() },
+    { id: 'tsla', symbol: 'TSLA', name: 'Tesla', category: 'US Stocks', currentPrice: 248.50, change24h: -1.23, lastUpdated: new Date().toISOString() },
+    { id: 'aapl', symbol: 'AAPL', name: 'Apple', category: 'US Stocks', currentPrice: 178.90, change24h: 0.45, lastUpdated: new Date().toISOString() },
+    { id: 'googl', symbol: 'GOOGL', name: 'Google', category: 'US Stocks', currentPrice: 142.30, change24h: 0.89, lastUpdated: new Date().toISOString() },
+    { id: 'msft', symbol: 'MSFT', name: 'Microsoft', category: 'US Stocks', currentPrice: 378.20, change24h: 0.67, lastUpdated: new Date().toISOString() },
+    { id: 'amzn', symbol: 'AMZN', name: 'Amazon', category: 'US Stocks', currentPrice: 185.40, change24h: 1.12, lastUpdated: new Date().toISOString() },
+
+    // Indices
+    { id: 'spx500', symbol: 'SPX500', name: 'S&P 500', category: 'Indices', currentPrice: 5120.30, change24h: 0.45, lastUpdated: new Date().toISOString() },
+    { id: 'us30', symbol: 'US30', name: 'Dow Jones', category: 'Indices', currentPrice: 42580.50, change24h: 0.32, lastUpdated: new Date().toISOString() },
+    { id: 'nas100', symbol: 'NAS100', name: 'Nasdaq 100', category: 'Indices', currentPrice: 18920.40, change24h: 0.78, lastUpdated: new Date().toISOString() },
+    { id: 'russ2000', symbol: 'RUSS2000', name: 'Russell 2000', category: 'Indices', currentPrice: 2245.60, change24h: -0.23, lastUpdated: new Date().toISOString() },
+    { id: 'china50', symbol: 'CHINA50', name: 'China A50', category: 'Indices', currentPrice: 12450.30, change24h: 1.45, lastUpdated: new Date().toISOString() },
+    { id: 'hk50', symbol: 'HK50', name: 'Hang Seng', category: 'Indices', currentPrice: 19870.20, change24h: 0.89, lastUpdated: new Date().toISOString() },
+    { id: 'jpn225', symbol: 'JPN225', name: 'Nikkei 225', category: 'Indices', currentPrice: 38420.50, change24h: 0.56, lastUpdated: new Date().toISOString() },
+    { id: 'vix', symbol: 'VIX', name: 'Volatility Index', category: 'Indices', currentPrice: 14.25, change24h: -2.34, lastUpdated: new Date().toISOString() },
+    { id: 'usdx', symbol: 'USDX', name: 'US Dollar Index', category: 'Indices', currentPrice: 104.20, change24h: 0.05, lastUpdated: new Date().toISOString() },
+
+    // HK Stocks
+    { id: 'tencent', symbol: '0700.HK', name: 'Tencent', category: 'HK Stocks', currentPrice: 378.40, change24h: 1.23, lastUpdated: new Date().toISOString() },
+    { id: 'baba', symbol: '9988.HK', name: 'Alibaba', category: 'HK Stocks', currentPrice: 85.60, change24h: -0.45, lastUpdated: new Date().toISOString() },
+    { id: 'xiaomi', symbol: '1810.HK', name: 'Xiaomi', category: 'HK Stocks', currentPrice: 18.90, change24h: 2.34, lastUpdated: new Date().toISOString() },
+    { id: '3750hk', symbol: '3750.HK', name: 'SH Electric', category: 'HK Stocks', currentPrice: 3.45, change24h: 0.12, lastUpdated: new Date().toISOString() },
+
+    // Commodities
+    { id: 'xauusd', symbol: 'XAUUSD', name: 'Gold', category: 'Commodities', currentPrice: 2340.50, change24h: -0.12, lastUpdated: new Date().toISOString() },
+    { id: 'xagusd', symbol: 'XAGUSD', name: 'Silver', category: 'Commodities', currentPrice: 28.45, change24h: 0.56, lastUpdated: new Date().toISOString() },
+    { id: 'xptusd', symbol: 'XPTUSD', name: 'Platinum', category: 'Commodities', currentPrice: 985.30, change24h: -0.34, lastUpdated: new Date().toISOString() },
+    { id: 'xpdusd', symbol: 'XPDUSD', name: 'Palladium', category: 'Commodities', currentPrice: 1125.40, change24h: 1.23, lastUpdated: new Date().toISOString() },
+    { id: 'usousd', symbol: 'USOUSD', name: 'US Oil', category: 'Commodities', currentPrice: 78.45, change24h: -1.56, lastUpdated: new Date().toISOString() },
+
+    // Forex
+    { id: 'usdcnh', symbol: 'USDCNH', name: 'USD/CNH', category: 'Forex', currentPrice: 7.2845, change24h: 0.12, lastUpdated: new Date().toISOString() },
+    { id: 'eurusd', symbol: 'EURUSD', name: 'EUR/USD', category: 'Forex', currentPrice: 1.0845, change24h: -0.23, lastUpdated: new Date().toISOString() },
+    { id: 'usdjpy', symbol: 'USDJPY', name: 'USD/JPY', category: 'Forex', currentPrice: 157.45, change24h: 0.34, lastUpdated: new Date().toISOString() },
+    { id: 'audusd', symbol: 'AUDUSD', name: 'AUD/USD', category: 'Forex', currentPrice: 0.6245, change24h: -0.45, lastUpdated: new Date().toISOString() },
+    { id: 'gbpusd', symbol: 'GBPUSD', name: 'GBP/USD', category: 'Forex', currentPrice: 1.2545, change24h: 0.12, lastUpdated: new Date().toISOString() },
 ];
 
 export const MOCK_ASSET = MOCK_ASSETS[0];
