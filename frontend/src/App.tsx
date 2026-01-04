@@ -11,6 +11,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { Calendar } from './pages/Calendar/Calendar';
 import { Portfolio } from './pages/Portfolio/Portfolio';
 import { Markets } from './pages/Markets/Markets';
+import { MacroStats } from './components/MacroStats/MacroStats';
 import {
   BarChart3,
   Calendar as CalendarIcon,
@@ -145,6 +146,7 @@ function App() {
             <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
               {activeAsset.id === 'btc' && <ShockwavePanel event={MOCK_SHOCKWAVE_EVENT} />}
               <AssetHero asset={activeAsset} />
+              <MacroStats />
               <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: 'var(--space-8)', alignItems: 'start' }}>
                 <MacroImpact macroData={MOCK_MACRO_DATA} />
                 <BettingPanel bets={MOCK_BETS} />
