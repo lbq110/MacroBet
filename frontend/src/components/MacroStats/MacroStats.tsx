@@ -146,12 +146,6 @@ const MACRO_STATS: IndicatorStats[] = [
     },
 ];
 
-const getResultLabel = (indicator: MacroIndicator, result: ResultType): string => {
-    if (indicator === 'fed_rate') {
-        return result === 'above' ? 'Rate Hike' : result === 'inline' ? 'No Change' : 'Rate Cut';
-    }
-    return result === 'above' ? 'Above Expectation' : result === 'inline' ? 'In Line' : 'Below Expectation';
-};
 
 const getResultLabelCn = (indicator: MacroIndicator, result: ResultType): string => {
     if (indicator === 'fed_rate') {
