@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MOCK_ASSETS, MOCK_MACRO_DATA, MOCK_BETS, MOCK_SHOCKWAVE_EVENT } from './data/mockData';
+import { MOCK_ASSETS, MOCK_MACRO_DATA, MOCK_BETS, ALL_SHOCKWAVE_EVENTS } from './data/mockData';
 import { useI18n } from './i18n';
 import { useAuth } from './auth/AuthContext';
 
@@ -144,7 +144,12 @@ function App() {
         <main className="main-content">
           {view === 'detail' ? (
             <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
-              {activeAsset.id === 'btc' && <ShockwavePanel event={MOCK_SHOCKWAVE_EVENT} />}
+              {/* All Shockwave Betting Panels */}
+              <div className="shockwave-events-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 'var(--space-6)' }}>
+                {ALL_SHOCKWAVE_EVENTS.map(event => (
+                  <ShockwavePanel key={event.id} event={event} />
+                ))}
+              </div>
               <AssetHero asset={activeAsset} />
               <MacroStats />
               <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: 'var(--space-8)', alignItems: 'start' }}>

@@ -230,3 +230,98 @@ export const MOCK_SHOCKWAVE_EVENT: ShockwaveEvent = {
         { id: 'j4', rangeLabel: 'BTC $95k-$96k', subMode: ShockwaveSubMode.JACKPOT, odds: 5 },
     ]
 };
+
+// NFP Shockwave Event
+export const MOCK_NFP_EVENT: ShockwaveEvent = {
+    id: 'nfp-sw-001',
+    indicatorName: 'Non-Farm Payrolls',
+    releaseTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3).toISOString(), // 3 days from now
+    expectedValue: 180000,
+    status: EventStatus.BETTING,
+    eventType: EventType.SHOCKWAVE,
+    basePrice: 95420.50,
+    options: [
+        { id: 'nfp-s1', rangeLabel: 'STRONG JOBS', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'nfp-s2', rangeLabel: 'IN LINE', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'nfp-s3', rangeLabel: 'WEAK JOBS', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'nfp-v1', rangeLabel: 'CALM', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'nfp-v2', rangeLabel: 'TSUNAMI', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'nfp-j1', rangeLabel: 'BTC > $98,000', subMode: ShockwaveSubMode.JACKPOT, odds: 45 },
+        { id: 'nfp-j2', rangeLabel: 'BTC $97k-$98k', subMode: ShockwaveSubMode.JACKPOT, odds: 18 },
+        { id: 'nfp-j3', rangeLabel: 'BTC $96k-$97k', subMode: ShockwaveSubMode.JACKPOT, odds: 8 },
+        { id: 'nfp-j4', rangeLabel: 'BTC $95k-$96k', subMode: ShockwaveSubMode.JACKPOT, odds: 4 },
+    ]
+};
+
+// GDP Shockwave Event
+export const MOCK_GDP_EVENT: ShockwaveEvent = {
+    id: 'gdp-sw-001',
+    indicatorName: 'GDP',
+    releaseTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(), // 7 days from now
+    expectedValue: 2.8,
+    status: EventStatus.UPCOMING,
+    eventType: EventType.SHOCKWAVE,
+    basePrice: 95420.50,
+    options: [
+        { id: 'gdp-s1', rangeLabel: 'GROWTH', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'gdp-s2', rangeLabel: 'STABLE', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'gdp-s3', rangeLabel: 'SLOWDOWN', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'gdp-v1', rangeLabel: 'CALM', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'gdp-v2', rangeLabel: 'TSUNAMI', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'gdp-j1', rangeLabel: 'SPX > 5200', subMode: ShockwaveSubMode.JACKPOT, odds: 40 },
+        { id: 'gdp-j2', rangeLabel: 'SPX 5100-5200', subMode: ShockwaveSubMode.JACKPOT, odds: 15 },
+        { id: 'gdp-j3', rangeLabel: 'SPX 5000-5100', subMode: ShockwaveSubMode.JACKPOT, odds: 6 },
+    ]
+};
+
+// Fed Rate Decision Shockwave Event
+export const MOCK_FED_RATE_EVENT: ShockwaveEvent = {
+    id: 'fed-sw-001',
+    indicatorName: 'Fed Rate Decision',
+    releaseTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14).toISOString(), // 14 days from now
+    expectedValue: 4.5,
+    status: EventStatus.UPCOMING,
+    eventType: EventType.SHOCKWAVE,
+    basePrice: 95420.50,
+    options: [
+        { id: 'fed-s1', rangeLabel: 'RATE HIKE', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'fed-s2', rangeLabel: 'NO CHANGE', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'fed-s3', rangeLabel: 'RATE CUT', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'fed-v1', rangeLabel: 'CALM', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'fed-v2', rangeLabel: 'TSUNAMI', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'fed-j1', rangeLabel: 'BTC > $100,000', subMode: ShockwaveSubMode.JACKPOT, odds: 100 },
+        { id: 'fed-j2', rangeLabel: 'BTC $98k-$100k', subMode: ShockwaveSubMode.JACKPOT, odds: 30 },
+        { id: 'fed-j3', rangeLabel: 'BTC $96k-$98k', subMode: ShockwaveSubMode.JACKPOT, odds: 12 },
+        { id: 'fed-j4', rangeLabel: 'BTC < $95k', subMode: ShockwaveSubMode.JACKPOT, odds: 8 },
+    ]
+};
+
+// BOJ Rate Decision Shockwave Event
+export const MOCK_BOJ_RATE_EVENT: ShockwaveEvent = {
+    id: 'boj-sw-001',
+    indicatorName: 'BOJ Rate Decision',
+    releaseTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 21).toISOString(), // 21 days from now
+    expectedValue: 0.25,
+    status: EventStatus.UPCOMING,
+    eventType: EventType.SHOCKWAVE,
+    basePrice: 157.45,
+    options: [
+        { id: 'boj-s1', rangeLabel: 'RATE HIKE', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'boj-s2', rangeLabel: 'NO CHANGE', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'boj-s3', rangeLabel: 'RATE CUT', subMode: ShockwaveSubMode.DATA_SNIPER },
+        { id: 'boj-v1', rangeLabel: 'CALM', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'boj-v2', rangeLabel: 'TSUNAMI', subMode: ShockwaveSubMode.VOLATILITY_HUNTER },
+        { id: 'boj-j1', rangeLabel: 'USDJPY > 160', subMode: ShockwaveSubMode.JACKPOT, odds: 60 },
+        { id: 'boj-j2', rangeLabel: 'USDJPY 155-160', subMode: ShockwaveSubMode.JACKPOT, odds: 25 },
+        { id: 'boj-j3', rangeLabel: 'USDJPY < 155', subMode: ShockwaveSubMode.JACKPOT, odds: 15 },
+    ]
+};
+
+// All shockwave events collection
+export const ALL_SHOCKWAVE_EVENTS: ShockwaveEvent[] = [
+    MOCK_SHOCKWAVE_EVENT,
+    MOCK_NFP_EVENT,
+    MOCK_GDP_EVENT,
+    MOCK_FED_RATE_EVENT,
+    MOCK_BOJ_RATE_EVENT,
+];
