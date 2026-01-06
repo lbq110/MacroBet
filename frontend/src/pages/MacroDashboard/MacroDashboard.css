@@ -113,7 +113,7 @@
 /* Category Items - Premium Grid */
 .category-items {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--space-2);
     padding: 0 var(--space-4) var(--space-4);
     background: rgba(0, 0, 0, 0.15);
@@ -141,11 +141,7 @@
 .item-name {
     font-size: 0.75rem;
     color: #94a3b8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex: 1;
-    min-width: 0;
+    flex-shrink: 0;
 }
 
 .item-value-group {
