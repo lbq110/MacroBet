@@ -12,6 +12,8 @@ import { Calendar } from './pages/Calendar/Calendar';
 import { Portfolio } from './pages/Portfolio/Portfolio';
 import { Markets } from './pages/Markets/Markets';
 import { MacroStats } from './components/MacroStats/MacroStats';
+import { MacroObservatory } from './components/MacroObservatory/MacroObservatory';
+import { FocusData } from './components/FocusData/FocusData';
 import {
   BarChart3,
   Calendar as CalendarIcon,
@@ -144,6 +146,12 @@ function App() {
         <main className="main-content">
           {view === 'detail' ? (
             <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
+              {/* Macro Observatory - Fixed Section */}
+              <MacroObservatory />
+
+              {/* Focus Data - Recent Economic Data */}
+              <FocusData />
+
               {/* All Shockwave Betting Panels */}
               <div className="shockwave-events-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 'var(--space-6)' }}>
                 {ALL_SHOCKWAVE_EVENTS.map(event => (
