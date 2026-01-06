@@ -1,19 +1,16 @@
 import { useState } from 'react';
-import { MOCK_ASSETS, MOCK_MACRO_DATA, MOCK_BETS, ALL_SHOCKWAVE_EVENTS } from './data/mockData';
+import { MOCK_ASSETS, ALL_SHOCKWAVE_EVENTS } from './data/mockData';
 import { useI18n } from './i18n';
 import { useAuth } from './auth/AuthContext';
 
-import { AssetHero } from './components/AssetHero/AssetHero';
-import { MacroImpact } from './components/MacroImpact/MacroImpact';
-import { BettingPanel } from './components/BettingPanel/BettingPanel';
 import { ShockwavePanel } from './components/ShockwavePanel/ShockwavePanel';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { Calendar } from './pages/Calendar/Calendar';
 import { Portfolio } from './pages/Portfolio/Portfolio';
 import { Markets } from './pages/Markets/Markets';
 import { MacroStats } from './components/MacroStats/MacroStats';
-import { MacroObservatory } from './components/MacroObservatory/MacroObservatory';
 import { FocusData } from './components/FocusData/FocusData';
+import { MacroDashboard } from './pages/MacroDashboard/MacroDashboard';
 import {
   BarChart3,
   Calendar as CalendarIcon,
@@ -26,15 +23,13 @@ import {
 } from 'lucide-react';
 import './App.css';
 
-type ViewType = 'detail' | 'calendar' | 'portfolio' | 'markets';
+type ViewType = 'detail' | 'calendar' | 'portfolio' | 'markets' | 'macro';
 
 function App() {
   const [view, setView] = useState<ViewType>('detail');
   const [activeAssetId, setActiveAssetId] = useState<string>(MOCK_ASSETS[0].id);
   const { t } = useI18n();
   const { user, login, logout, isLoading } = useAuth();
-
-  const activeAsset = MOCK_ASSETS.find(a => a.id === activeAssetId) || MOCK_ASSETS[0];
 
   return (
     <div className="app-container">
@@ -61,6 +56,13 @@ function App() {
           >
             <TrendingUp size={20} />
             <span>{t.nav.markets}</span>
+          </button>
+          <button
+            className={`nav-btn ${view === 'macro' ? 'active' : ''}`}
+            onClick={() => setView('macro')}
+          >
+            <BarChart3 size={20} />
+            <span>Macro</span>
           </button>
           <button
             className={`nav-btn ${view === 'portfolio' ? 'active' : ''}`}
@@ -146,29 +148,25 @@ function App() {
         <main className="main-content">
           {view === 'detail' ? (
             <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
-              {/* Macro Observatory - Fixed Section */}
-              <MacroObservatory />
-
-              {/* Focus Data - Recent Economic Data */}
-              <FocusData />
-
-              {/* All Shockwave Betting Panels */}
-              <div className="shockwave-events-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: 'var(--space-6)' }}>
-                {ALL_SHOCKWAVE_EVENTS.map(event => (
+              {/* 1. Shockwave Betting Panels - CPI, NFP, GDP, Fed Rate */}
+              <div className="shockwave-events-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-6)' }}>
+                {ALL_SHOCKWAVE_EVENTS.filter(e => e.id !== 'boj-sw-001').map(event => (
                   <ShockwavePanel key={event.id} event={event} />
                 ))}
               </div>
-              <AssetHero asset={activeAsset} />
+
+              {/* 2. Macro Data Impact - 30 Year Historical Statistics */}
               <MacroStats />
-              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: 'var(--space-8)', alignItems: 'start' }}>
-                <MacroImpact macroData={MOCK_MACRO_DATA} />
-                <BettingPanel bets={MOCK_BETS} />
-              </div>
+
+              {/* 3. Recent Focus Data */}
+              <FocusData />
             </div>
           ) : view === 'calendar' ? (
             <Calendar />
           ) : view === 'markets' ? (
             <Markets />
+          ) : view === 'macro' ? (
+            <MacroDashboard />
           ) : (
             <Portfolio />
           )}
