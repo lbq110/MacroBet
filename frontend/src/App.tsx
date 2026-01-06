@@ -149,7 +149,7 @@ function App() {
           {view === 'detail' ? (
             <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
               {/* 1. Shockwave Betting Panels - CPI, NFP, GDP, Fed Rate */}
-              <div className="shockwave-events-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-6)' }}>
+              <div className="shockwave-events-grid" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
                 {ALL_SHOCKWAVE_EVENTS.filter(e => e.id !== 'boj-sw-001').map(event => (
                   <ShockwavePanel key={event.id} event={event} />
                 ))}
