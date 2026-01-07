@@ -8,7 +8,6 @@ export const en = {
     // Navigation
     nav: {
         dashboard: 'Dashboard',
-        calendar: 'Calendar',
         markets: 'Markets',
         portfolio: 'Portfolio',
         settings: 'Settings',

@@ -8,7 +8,6 @@ export const zh = {
     // Navigation
     nav: {
         dashboard: '仪表盘',
-        calendar: '日历',
         markets: '市场',
         portfolio: '投资组合',
         settings: '设置',

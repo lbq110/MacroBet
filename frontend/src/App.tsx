@@ -5,7 +5,7 @@ import { useAuth } from './auth/AuthContext';
 
 import { ShockwavePanel } from './components/ShockwavePanel/ShockwavePanel';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
-import { Calendar } from './pages/Calendar/Calendar';
+
 import { Portfolio } from './pages/Portfolio/Portfolio';
 import { Markets } from './pages/Markets/Markets';
 import { MacroStats } from './components/MacroStats/MacroStats';
@@ -13,7 +13,6 @@ import { FocusData } from './components/FocusData/FocusData';
 import { MacroDashboard } from './pages/MacroDashboard/MacroDashboard';
 import {
   BarChart3,
-  Calendar as CalendarIcon,
   LayoutDashboard,
   Settings,
   TrendingUp,
@@ -23,7 +22,7 @@ import {
 } from 'lucide-react';
 import './App.css';
 
-type ViewType = 'detail' | 'calendar' | 'portfolio' | 'markets' | 'macro';
+type ViewType = 'detail' | 'portfolio' | 'markets' | 'macro';
 
 function App() {
   const [view, setView] = useState<ViewType>('detail');
@@ -43,13 +42,7 @@ function App() {
             <LayoutDashboard size={20} />
             <span>{t.nav.dashboard}</span>
           </button>
-          <button
-            className={`nav-btn ${view === 'calendar' ? 'active' : ''}`}
-            onClick={() => setView('calendar')}
-          >
-            <CalendarIcon size={20} />
-            <span>{t.nav.calendar}</span>
-          </button>
+
           <button
             className={`nav-btn ${view === 'markets' ? 'active' : ''}`}
             onClick={() => setView('markets')}
@@ -161,8 +154,6 @@ function App() {
               {/* 3. Recent Focus Data */}
               <FocusData />
             </div>
-          ) : view === 'calendar' ? (
-            <Calendar />
           ) : view === 'markets' ? (
             <Markets />
           ) : view === 'macro' ? (
