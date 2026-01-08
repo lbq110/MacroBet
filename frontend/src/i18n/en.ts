@@ -7,8 +7,9 @@ export const en = {
 
     // Navigation
     nav: {
-        dashboard: 'Dashboard',
-        markets: 'Markets',
+        dashboard: 'Data Shockwave',
+        markets: 'Prediction Markets',
+        macro: 'Data Dashboard',
         portfolio: 'Portfolio',
         settings: 'Settings',
     },

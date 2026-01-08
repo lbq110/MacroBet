@@ -7,8 +7,9 @@ export const zh = {
 
     // Navigation
     nav: {
-        dashboard: '仪表盘',
-        markets: '市场',
+        dashboard: '数据冲击波',
+        markets: '预测市场',
+        macro: '数据仪表盘',
         portfolio: '投资组合',
         settings: '设置',
     },

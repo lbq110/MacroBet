@@ -55,7 +55,7 @@ function App() {
             onClick={() => setView('macro')}
           >
             <BarChart3 size={20} />
-            <span>Macro</span>
+            <span>{t.nav.macro}</span>
           </button>
           <button
             className={`nav-btn ${view === 'portfolio' ? 'active' : ''}`}
