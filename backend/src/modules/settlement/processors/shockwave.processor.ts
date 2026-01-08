@@ -62,8 +62,8 @@ export class ShockwaveProcessor {
     private async handleT0(event: MacroEvent) {
         this.logger.log(`Shockwave T0: Recording base price for event ${event.id}`);
 
-        // 取 8:29:55 - 08:30:05 的 TWAP
-        const basePrice = await this.priceService.getTwap('BTC', event.releaseTime, 10);
+        // 取 T0 前后 15 秒的 TWAP
+        const basePrice = await this.priceService.getTwap('BTC', event.releaseTime, 15);
 
         event.basePrice = basePrice;
         event.status = EventStatus.LIVE;
@@ -79,7 +79,7 @@ export class ShockwaveProcessor {
         this.logger.log(`Shockwave T5: Settling event ${event.id}`);
 
         const settleTime = new Date(event.releaseTime.getTime() + 5 * 60 * 1000);
-        const settlePrice = await this.priceService.getTwap('BTC', settleTime, 10);
+        const settlePrice = await this.priceService.getTwap('BTC', settleTime, 15);
 
         // 获取实际宏观值 (模拟)
         // 在真实场景中，这里应调用第三方 API 或数据库中的最新 ActualValue
@@ -102,7 +102,14 @@ export class ShockwaveProcessor {
                 if (opt.subMode === ShockwaveSubMode.DATA_SNIPER) {
                     isWinner = this.judgeDataSniper(actualValue, event.expectedValue, opt);
                 } else if (opt.subMode === ShockwaveSubMode.VOLATILITY_HUNTER) {
-                    isWinner = this.judgeVolatility(settlePrice, Number(event.basePrice), opt);
+                    const volResult = this.judgeVolatility(settlePrice, Number(event.basePrice), opt);
+                    if (volResult === 'REFUND') {
+                        // 中间地带：标记为需要退款
+                        opt.isWinner = false;
+                        (opt as any).needRefund = true;
+                    } else {
+                        isWinner = volResult === 'WIN';
+                    }
                 } else if (opt.subMode === ShockwaveSubMode.JACKPOT) {
                     isWinner = this.judgeJackpot(settlePrice, opt);
                 }
@@ -139,7 +146,18 @@ export class ShockwaveProcessor {
                 });
 
                 for (const bet of bets) {
-                    if (bet.option.isWinner) {
+                    // 检查是否需要退款（Volatility Hunter 中间地带）
+                    const optNeedRefund = (bet.option as any).needRefund;
+
+                    if (optNeedRefund) {
+                        bet.status = BetStatus.REFUNDED;
+                        // 全额退款
+                        const user = await manager.findOne(User, { where: { id: bet.user.id }, lock: { mode: 'pessimistic_write' } });
+                        if (user) {
+                            user.balance = Number(user.balance) + Number(bet.amount);
+                            await manager.save(user);
+                        }
+                    } else if (bet.option.isWinner) {
                         bet.status = BetStatus.WON;
                         bet.payoutOdds = finalOdds;
                         const payout = Number(bet.amount) * finalOdds;
@@ -174,11 +192,22 @@ export class ShockwaveProcessor {
         return false;
     }
 
-    private judgeVolatility(settle: number, base: number, opt: BetOption): boolean {
+    private judgeVolatility(settle: number, base: number, opt: BetOption): 'WIN' | 'LOSE' | 'REFUND' {
         const delta = Math.abs(settle - base);
-        if (opt.rangeLabel === 'TSUNAMI') return delta >= 1000;
-        if (opt.rangeLabel === 'CALM') return delta < 200;
-        return false;
+        const CALM_THRESHOLD = 200;
+        const TSUNAMI_THRESHOLD = 1000;
+
+        if (opt.rangeLabel === 'TSUNAMI') {
+            if (delta >= TSUNAMI_THRESHOLD) return 'WIN';
+            if (delta < CALM_THRESHOLD) return 'LOSE';
+            return 'REFUND'; // 中间地带
+        }
+        if (opt.rangeLabel === 'CALM') {
+            if (delta < CALM_THRESHOLD) return 'WIN';
+            if (delta >= TSUNAMI_THRESHOLD) return 'LOSE';
+            return 'REFUND'; // 中间地带
+        }
+        return 'LOSE';
     }
 
     private judgeJackpot(settle: number, opt: BetOption): boolean {

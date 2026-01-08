@@ -25,4 +25,10 @@ export class EventsController {
     findOne(@Param('id') id: string) {
         return this.eventsService.findOne(id);
     }
+
+    @Get(':id/odds')
+    @ApiOperation({ summary: 'Get real-time Pari-mutuel odds for a Shockwave event' })
+    getOdds(@Param('id') id: string) {
+        return this.eventsService.calculatePariMutuelOdds(id);
+    }
 }

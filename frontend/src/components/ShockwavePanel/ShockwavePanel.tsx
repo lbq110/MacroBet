@@ -3,6 +3,7 @@ import { Target, Zap, Trophy, Timer, AlertCircle, TrendingUp, TrendingDown, Minu
 import type { ShockwaveEvent } from '../../types';
 import { EventStatus, ShockwaveSubMode } from '../../types';
 import { useI18n } from '../../i18n';
+import { useOdds } from '../../hooks/useOdds';
 import './ShockwavePanel.css';
 
 interface ShockwavePanelProps {
@@ -14,6 +15,9 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
     const [activeMode, setActiveMode] = useState<string | null>(null);
+
+    // Fetch real-time odds (3 second refresh)
+    const { odds } = useOdds(event.id, 3000);
 
     // Countdown Logic
     useEffect(() => {
@@ -40,6 +44,18 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
     const sniperOptions = useMemo(() => event.options.filter(o => o.subMode === ShockwaveSubMode.DATA_SNIPER), [event.options]);
     const volOptions = useMemo(() => event.options.filter(o => o.subMode === ShockwaveSubMode.VOLATILITY_HUNTER), [event.options]);
     const jackpotOptions = useMemo(() => event.options.filter(o => o.subMode === ShockwaveSubMode.JACKPOT), [event.options]);
+
+    // Helper function to get pool share display
+    const getPoolShare = (mode: 'dataSniper' | 'volatilityHunter' | 'jackpot', rangeLabel: string): string => {
+        if (!odds || !odds[mode]) {
+            return '---';
+        }
+        const modeOdds = odds[mode];
+        const total = Object.values(modeOdds).reduce((sum, v) => sum + v, 0);
+        if (total === 0) return '33%'; // Default equal split
+        const share = (modeOdds[rangeLabel] || 0) / total * 100;
+        return `${share.toFixed(0)}%`;
+    };
 
     const handleSelect = (mode: string, optionId: string) => {
         if (isLocked) return;
@@ -148,7 +164,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                                         {opt.rangeLabel === 'DOVISH' ? t.shockwave.dovish :
                                             opt.rangeLabel === 'NEUTRAL' ? t.shockwave.neutral : t.shockwave.hawkish}
                                     </span>
-                                    <span className="odds">{t.shockwave.poolShare}: 35%</span>
+                                    <span className="odds">{t.shockwave.poolShare}: {getPoolShare('dataSniper', opt.rangeLabel)}</span>
                                 </div>
                             </button>
                         ))}
