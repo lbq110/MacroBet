@@ -129,14 +129,46 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
         const selectedOptionId = Object.values(selectedOptions)[0];
         const selectedOption = event.options.find(o => o.id === selectedOptionId);
 
-        // For now, show confirmation (in production, this would call the backend API)
+        // TODO: In production, call backend API here
+        // await fetch('/api/bets', { method: 'POST', body: JSON.stringify({ ... }) });
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        setIsSubmitting(false);
+
+        // Show success state - keep modal open briefly to show confirmation
+        const betDetails = {
+            mode: activeMode?.toUpperCase(),
+            option: selectedOption?.rangeLabel,
+            amount: amount,
+            potentialWin: activeMode === 'jackpot' ? amount * (selectedOption?.odds || 1) : null
+        };
+
+        // Close modal and show toast-style feedback
+        setShowBetModal(false);
+        setBetAmount('10');
+        clearSelection();
+
+        // Create a temporary success notification
+        const notification = document.createElement('div');
+        notification.className = 'bet-success-toast';
+        notification.innerHTML = `
+            <div class="toast-content">
+                <span class="toast-icon">✅</span>
+                <div class="toast-text">
+                    <strong>Bet Placed Successfully!</strong>
+                    <span>${betDetails.option} · $${betDetails.amount}</span>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(notification);
+
+        // Remove notification after 3 seconds
         setTimeout(() => {
-            setIsSubmitting(false);
-            setShowBetModal(false);
-            setBetAmount('10');
-            clearSelection();
-            alert(`✅ Bet placed!\n\nMode: ${activeMode?.toUpperCase()}\nOption: ${selectedOption?.rangeLabel}\nAmount: $${amount}`);
-        }, 500);
+            notification.classList.add('fade-out');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     };
 
     // Get selected option for modal display

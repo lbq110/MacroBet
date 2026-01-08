@@ -1012,3 +1012,73 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* Success Toast Notification */
+.bet-success-toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
+    border-radius: 16px;
+    padding: 16px 24px;
+    box-shadow:
+        0 10px 40px rgba(16, 185, 129, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    z-index: 2000;
+    animation: toastSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.bet-success-toast.fade-out {
+    animation: toastFadeOut 0.3s ease forwards;
+}
+
+@keyframes toastFadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.bet-success-toast .toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bet-success-toast .toast-icon {
+    font-size: 24px;
+}
+
+.bet-success-toast .toast-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bet-success-toast .toast-text strong {
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.bet-success-toast .toast-text span {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+}
