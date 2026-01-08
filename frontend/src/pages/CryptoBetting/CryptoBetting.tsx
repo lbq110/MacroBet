@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Bitcoin, Clock, RefreshCw, BookOpen, TrendingUp, TrendingDown } from 'lucide-react';
-import { useBets } from '../../context/BetsContext';
+import { MarketBetModal } from '../../components/MarketBetModal';
 import './CryptoBetting.css';
 
 // Types
@@ -84,16 +84,16 @@ const formatPeriodRange = (period: PeriodInfo): string => {
 };
 
 export const CryptoBetting = () => {
-    const { addOrder } = useBets();
     const [selectedSide, setSelectedSide] = useState<'up' | 'down'>('up');
-    const [orderType, setOrderType] = useState<'buy' | 'sell'>('buy');
-    const [amount, setAmount] = useState<string>('0');
     const [orderBookTab, setOrderBookTab] = useState<'up' | 'down'>('up');
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [chartData] = useState(generateMockChartData());
     const [currentPrice, setCurrentPrice] = useState(87840.20);
     const [period] = useState(getCurrentPeriod());
-    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Modal state
+    const [showBetModal, setShowBetModal] = useState(false);
+    const [betDirection, setBetDirection] = useState<'up' | 'down'>('up');
 
     // Odds (in dollars)
     const upOdds = 0.74;
@@ -129,63 +129,10 @@ export const CryptoBetting = () => {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    const handleQuickAmount = (value: number) => {
-        setAmount(prev => (parseFloat(prev) + value).toString());
-    };
-
-    // Handle place bet
-    const handlePlaceBet = async () => {
-        const betAmount = parseFloat(amount);
-        if (isNaN(betAmount) || betAmount < 1) {
-            alert('Please enter a valid amount (minimum $1)');
-            return;
-        }
-        if (betAmount > 10000) {
-            alert('Maximum bet amount is $10,000');
-            return;
-        }
-
-        setIsSubmitting(true);
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        const odds = selectedSide === 'up' ? upOdds : downOdds;
-        const potentialWin = betAmount / odds;
-
-        // Add order to global state
-        addOrder({
-            eventId: `btc_${period.start.getTime()}`,
-            eventName: `BTC ${selectedSide === 'up' ? '▲' : '▼'} Prediction`,
-            mode: selectedSide === 'up' ? 'sniper' : 'vol',
-            modeLabel: `Bitcoin · ${selectedSide === 'up' ? 'Up' : 'Down'}`,
-            optionId: `btc_${selectedSide}`,
-            optionLabel: `${formatPeriodRange(period)}`,
-            amount: betAmount,
-            odds: odds,
-            potentialWin: potentialWin,
-        });
-
-        setIsSubmitting(false);
-        setAmount('0');
-
-        // Show toast notification
-        const notification = document.createElement('div');
-        notification.className = 'bet-success-toast';
-        notification.innerHTML = `
-            <div class="toast-content">
-                <span class="toast-icon">✅</span>
-                <div class="toast-text">
-                    <strong>${orderType === 'buy' ? 'Bought' : 'Sold'} ${selectedSide === 'up' ? 'Up' : 'Down'}!</strong>
-                    <span>BTC · $${betAmount}</span>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(notification);
-        setTimeout(() => {
-            notification.classList.add('fade-out');
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
+    // Open bet modal
+    const handleOpenBetModal = (direction: 'up' | 'down') => {
+        setBetDirection(direction);
+        setShowBetModal(true);
     };
 
     const orderBookData = generateMockOrderBook(orderBookTab);
@@ -269,24 +216,7 @@ export const CryptoBetting = () => {
 
                 {/* Right: Betting Panel */}
                 <div className="betting-section">
-                    {/* Buy/Sell Toggle */}
-                    <div className="order-type-toggle">
-                        <button
-                            className={`toggle-btn ${orderType === 'buy' ? 'active' : ''}`}
-                            onClick={() => setOrderType('buy')}
-                        >
-                            Buy
-                        </button>
-                        <button
-                            className={`toggle-btn ${orderType === 'sell' ? 'active' : ''}`}
-                            onClick={() => setOrderType('sell')}
-                        >
-                            Sell
-                        </button>
-                        <div className="market-dropdown">
-                            Market ▼
-                        </div>
-                    </div>
+                    <h3 className="section-title">Predict Direction</h3>
 
                     {/* Up/Down Selection */}
                     <div className="side-selection">
@@ -306,36 +236,12 @@ export const CryptoBetting = () => {
                         </button>
                     </div>
 
-                    {/* Amount Input */}
-                    <div className="amount-section">
-                        <div className="amount-header">
-                            <span className="amount-label">Amount</span>
-                            <span className="balance">Balance $0.00</span>
-                        </div>
-                        <div className="amount-input-wrapper">
-                            <span className="currency">$</span>
-                            <input
-                                type="text"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                className="amount-input"
-                            />
-                        </div>
-                        <div className="quick-amounts">
-                            <button onClick={() => handleQuickAmount(1)}>+$1</button>
-                            <button onClick={() => handleQuickAmount(20)}>+$20</button>
-                            <button onClick={() => handleQuickAmount(100)}>+$100</button>
-                            <button onClick={() => setAmount('0')}>Max</button>
-                        </div>
-                    </div>
-
-                    {/* Action Button */}
+                    {/* Place Bet Button */}
                     <button
                         className={`action-btn ${selectedSide}`}
-                        onClick={handlePlaceBet}
-                        disabled={isSubmitting || parseFloat(amount) < 1}
+                        onClick={() => handleOpenBetModal(selectedSide)}
                     >
-                        {isSubmitting ? 'Placing...' : `${orderType === 'buy' ? 'Buy' : 'Sell'} ${selectedSide === 'up' ? 'Up' : 'Down'}`}
+                        Place {selectedSide === 'up' ? 'Up' : 'Down'} Prediction
                     </button>
 
                     <p className="terms">By trading, you agree to the <a href="#">Terms of Use</a>.</p>
@@ -401,6 +307,21 @@ export const CryptoBetting = () => {
                     <span>Spread: $0.00</span>
                 </div>
             </div>
+
+            {/* Bet Modal */}
+            {showBetModal && (
+                <MarketBetModal
+                    market={{
+                        id: 'btc',
+                        symbol: 'BTC',
+                        name: 'Bitcoin',
+                        upOdds: upOdds,
+                        downOdds: downOdds,
+                    }}
+                    direction={betDirection}
+                    onClose={() => setShowBetModal(false)}
+                />
+            )}
         </div>
     );
 };
