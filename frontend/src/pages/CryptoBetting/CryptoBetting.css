@@ -269,19 +269,23 @@
     border-radius: 10px;
     padding: var(--space-3) var(--space-4);
     margin-bottom: var(--space-3);
+    overflow: hidden;
 }
 
 .currency {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: var(--text-muted);
     margin-right: var(--space-2);
+    flex-shrink: 0;
 }
 
 .amount-input {
     flex: 1;
+    min-width: 0;
+    width: 100%;
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
     text-align: right;
