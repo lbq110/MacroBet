@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Bitcoin, TrendingUp, Bookmark, DollarSign, BarChart2, Building2, Gem, Globe } from 'lucide-react';
 import { CryptoBetting } from '../CryptoBetting/CryptoBetting';
+import { MarketBetModal } from '../../components/MarketBetModal';
 import './Markets.css';
 
 // Market category types
@@ -108,6 +109,19 @@ export const Markets = () => {
     const [selectedCategory, setSelectedCategory] = useState<MarketCategory>('all');
     const [selectedMarket, setSelectedMarket] = useState<string | null>(null);
 
+    // Betting modal state
+    const [betModalOpen, setBetModalOpen] = useState(false);
+    const [betMarket, setBetMarket] = useState<MarketItem | null>(null);
+    const [betDirection, setBetDirection] = useState<'up' | 'down'>('up');
+
+    // Handle bet button click
+    const handleBet = (market: MarketItem, direction: 'up' | 'down', e: React.MouseEvent) => {
+        e.stopPropagation();
+        setBetMarket(market);
+        setBetDirection(direction);
+        setBetModalOpen(true);
+    };
+
     // If a market is selected, show the trading page
     if (selectedMarket) {
         return (
@@ -175,10 +189,16 @@ export const Markets = () => {
                         </div>
 
                         <div className="card-actions">
-                            <button className="action-up" onClick={(e) => { e.stopPropagation(); }}>
+                            <button
+                                className="action-up"
+                                onClick={(e) => handleBet(market, 'up', e)}
+                            >
                                 Up ${market.up.toFixed(2)}
                             </button>
-                            <button className="action-down" onClick={(e) => { e.stopPropagation(); }}>
+                            <button
+                                className="action-down"
+                                onClick={(e) => handleBet(market, 'down', e)}
+                            >
                                 Down ${market.down.toFixed(2)}
                             </button>
                         </div>
@@ -193,6 +213,21 @@ export const Markets = () => {
                     </div>
                 ))}
             </div>
+
+            {/* Bet Modal */}
+            {betModalOpen && betMarket && (
+                <MarketBetModal
+                    market={{
+                        id: betMarket.id,
+                        symbol: betMarket.symbol,
+                        name: betMarket.name,
+                        upOdds: betMarket.up,
+                        downOdds: betMarket.down,
+                    }}
+                    direction={betDirection}
+                    onClose={() => setBetModalOpen(false)}
+                />
+            )}
         </div>
     );
 };

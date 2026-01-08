@@ -1,0 +1,364 @@
+/* Market Bet Modal - Premium Design */
+.market-bet-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: overlayFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.market-bet-modal {
+    position: relative;
+    background: linear-gradient(180deg,
+            rgba(28, 28, 38, 0.98) 0%,
+            rgba(12, 12, 20, 0.99) 100%);
+    border-radius: 28px;
+    width: 92%;
+    max-width: 480px;
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.6),
+        0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    animation: modalSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+}
+
+/* Gradient border effect */
+.market-bet-modal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: 28px;
+    background: linear-gradient(180deg,
+            rgba(16, 185, 129, 0.4) 0%,
+            rgba(239, 68, 68, 0.2) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0);
+    }
+
+    to {
+        opacity: 1;
+        backdrop-filter: blur(12px);
+    }
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.market-bet-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.market-bet-modal .modal-header h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.market-bet-modal .close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.market-bet-modal .close-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+}
+
+.market-bet-modal .modal-body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+/* Direction Badge */
+.direction-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: var(--space-4);
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.direction-badge.up {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+.direction-badge.down {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.05) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+/* Period Section */
+.period-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.period-section label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.period-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.period-btn {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.period-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.period-btn.active {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #60a5fa;
+}
+
+/* Odds Display */
+.odds-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.odds-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--space-4);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.odds-item .label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.odds-item .value {
+    font-size: 24px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+}
+
+.odds-item .value.up {
+    color: #10b981;
+}
+
+.odds-item .value.down {
+    color: #ef4444;
+}
+
+.odds-item .value.highlight {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Amount Section */
+.market-bet-modal .amount-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.market-bet-modal .amount-section label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.market-bet-modal .amount-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: var(--space-3) var(--space-4);
+    transition: all 0.2s;
+}
+
+.market-bet-modal .amount-input-wrapper:focus-within {
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.market-bet-modal .amount-input-wrapper .currency {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    margin-right: var(--space-2);
+}
+
+.market-bet-modal .amount-input-wrapper input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.market-bet-modal .quick-amounts {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.market-bet-modal .quick-amounts button {
+    flex: 1;
+    padding: var(--space-2) var(--space-3);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.market-bet-modal .quick-amounts button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.market-bet-modal .quick-amounts button.active {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #60a5fa;
+}
+
+.amount-limits {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Footer */
+.market-bet-modal .modal-footer {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-6);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.market-bet-modal .cancel-btn {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.market-bet-modal .cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.market-bet-modal .confirm-btn {
+    flex: 2;
+    padding: var(--space-3) var(--space-4);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.market-bet-modal .confirm-btn.up {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.market-bet-modal .confirm-btn.down {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.market-bet-modal .confirm-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.market-bet-modal .confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
