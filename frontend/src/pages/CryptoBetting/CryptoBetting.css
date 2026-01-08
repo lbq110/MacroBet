@@ -154,6 +154,8 @@
     border: 1px solid var(--border-subtle);
     border-radius: 16px;
     padding: var(--space-5);
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .order-type-toggle {
@@ -270,6 +272,7 @@
     padding: var(--space-3) var(--space-4);
     margin-bottom: var(--space-3);
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 .currency {
@@ -280,15 +283,17 @@
 }
 
 .amount-input {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
-    width: 100%;
-    background: none;
+    max-width: 100%;
+    background: transparent;
     border: none;
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
     text-align: right;
+    box-sizing: border-box;
+    padding: 0;
 }
 
 .amount-input:focus {
