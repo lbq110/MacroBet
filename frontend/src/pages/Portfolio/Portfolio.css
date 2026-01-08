@@ -354,37 +354,59 @@
     min-height: 200px;
 }
 
-/* Order Card */
+/* Order Card - Premium Design */
 .order-card {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-regular);
-    border-radius: 12px;
-    padding: var(--space-4);
+    position: relative;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.04) 0%,
+            rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: var(--space-5);
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    transition: all 0.2s;
+    gap: var(--space-4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.order-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
 }
 
 .order-card:hover {
-    border-color: var(--border-subtle);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.06) 0%,
+            rgba(255, 255, 255, 0.02) 100%);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 .order-card.pending {
-    border-left: 3px solid #f59e0b;
+    border-left: 4px solid #f59e0b;
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.08) 0%, transparent 30%);
 }
 
 .order-card.won {
-    border-left: 3px solid #10b981;
+    border-left: 4px solid #10b981;
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.08) 0%, transparent 30%);
 }
 
 .order-card.lost {
-    border-left: 3px solid #ef4444;
+    border-left: 4px solid #ef4444;
+    background: linear-gradient(90deg, rgba(239, 68, 68, 0.08) 0%, transparent 30%);
 }
 
 .order-card.refunded {
-    border-left: 3px solid #6366f1;
+    border-left: 4px solid #6366f1;
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.08) 0%, transparent 30%);
 }
 
 .order-header {
