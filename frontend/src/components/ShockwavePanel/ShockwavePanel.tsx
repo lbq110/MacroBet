@@ -16,6 +16,11 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
     const [activeMode, setActiveMode] = useState<string | null>(null);
 
+    // Betting modal state
+    const [showBetModal, setShowBetModal] = useState(false);
+    const [betAmount, setBetAmount] = useState<string>('10');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Fetch real-time odds (3 second refresh)
     const { odds } = useOdds(event.id, 3000);
 
@@ -96,6 +101,49 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
             setActiveMode(mode);
             setSelectedOptions({ [mode]: defaultOptionId });
         }
+    };
+
+    // Open betting modal
+    const openBetModal = () => {
+        if (Object.keys(selectedOptions).length === 0) return;
+        setShowBetModal(true);
+    };
+
+    // Close betting modal
+    const closeBetModal = () => {
+        setShowBetModal(false);
+        setBetAmount('10');
+    };
+
+    // Handle bet submission
+    const handleBetSubmit = async () => {
+        const amount = parseFloat(betAmount);
+        if (isNaN(amount) || amount < 1) {
+            alert('Please enter a valid amount (minimum $1)');
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        // Get selected option details
+        const selectedOptionId = Object.values(selectedOptions)[0];
+        const selectedOption = event.options.find(o => o.id === selectedOptionId);
+
+        // For now, show confirmation (in production, this would call the backend API)
+        setTimeout(() => {
+            setIsSubmitting(false);
+            setShowBetModal(false);
+            setBetAmount('10');
+            clearSelection();
+            alert(`✅ Bet placed!\n\nMode: ${activeMode?.toUpperCase()}\nOption: ${selectedOption?.rangeLabel}\nAmount: $${amount}`);
+        }, 500);
+    };
+
+    // Get selected option for modal display
+    const getSelectedOptionDetails = () => {
+        if (!activeMode || !selectedOptions[activeMode]) return null;
+        const optionId = selectedOptions[activeMode];
+        return event.options.find(o => o.id === optionId);
     };
 
     return (
@@ -231,11 +279,11 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                     <span>{t.shockwave.lockPhase} {formatTime(timeLeft - 900 < 0 ? 0 : timeLeft - 900)}. {t.shockwave.noCancel}</span>
                 </div>
 
-                {/* Primary Action Row */}
                 <div className="footer-primary-row">
                     <button
                         className={`bet-btn-shockwave ${Object.keys(selectedOptions).length > 0 ? 'ready' : ''}`}
                         disabled={isLocked || Object.keys(selectedOptions).length === 0}
+                        onClick={openBetModal}
                     >
                         {isLocked ? t.shockwave.bettingLocked : t.shockwave.confirmBets}
                     </button>
@@ -254,6 +302,90 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                     </button>
                 </div>
             </div>
+
+            {/* Betting Modal */}
+            {showBetModal && (
+                <div className="bet-modal-overlay" onClick={closeBetModal}>
+                    <div className="bet-modal" onClick={e => e.stopPropagation()}>
+                        <div className="bet-modal-header">
+                            <h3>🎯 Confirm Your Bet</h3>
+                            <button className="close-btn" onClick={closeBetModal}>✕</button>
+                        </div>
+                        <div className="bet-modal-body">
+                            <div className="bet-info">
+                                <div className="info-row">
+                                    <span className="label">Event:</span>
+                                    <span className="value">{event.indicatorName} Shockwave</span>
+                                </div>
+                                <div className="info-row">
+                                    <span className="label">Mode:</span>
+                                    <span className="value mode-badge">
+                                        {activeMode === 'sniper' ? '🎯 Data Sniper' :
+                                            activeMode === 'vol' ? '🌊 Volatility Hunter' : '🎰 Jackpot'}
+                                    </span>
+                                </div>
+                                <div className="info-row">
+                                    <span className="label">Selection:</span>
+                                    <span className="value selection-badge">
+                                        {getSelectedOptionDetails()?.rangeLabel}
+                                    </span>
+                                </div>
+                                {activeMode === 'jackpot' && (
+                                    <div className="info-row">
+                                        <span className="label">Odds:</span>
+                                        <span className="value odds-value">
+                                            {getSelectedOptionDetails()?.odds}x
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="bet-amount-section">
+                                <label>Bet Amount (USD)</label>
+                                <div className="amount-input-wrapper">
+                                    <span className="currency">$</span>
+                                    <input
+                                        type="number"
+                                        value={betAmount}
+                                        onChange={e => setBetAmount(e.target.value)}
+                                        min="1"
+                                        max="10000"
+                                        placeholder="10"
+                                    />
+                                </div>
+                                <div className="quick-amounts">
+                                    {['10', '50', '100', '500'].map(amt => (
+                                        <button
+                                            key={amt}
+                                            className={betAmount === amt ? 'active' : ''}
+                                            onClick={() => setBetAmount(amt)}
+                                        >
+                                            ${amt}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            {activeMode === 'jackpot' && (
+                                <div className="potential-win">
+                                    <span>Potential Win:</span>
+                                    <span className="win-amount">
+                                        ${(parseFloat(betAmount || '0') * (getSelectedOptionDetails()?.odds || 0)).toFixed(2)}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                        <div className="bet-modal-footer">
+                            <button className="cancel-btn" onClick={closeBetModal}>Cancel</button>
+                            <button
+                                className="confirm-btn"
+                                onClick={handleBetSubmit}
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? 'Placing...' : 'Place Bet'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
