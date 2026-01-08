@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Bitcoin, Clock, RefreshCw, BookOpen, TrendingUp, TrendingDown } from 'lucide-react';
+import { useBets } from '../../context/BetsContext';
 import './CryptoBetting.css';
 
 // Types
@@ -83,6 +84,7 @@ const formatPeriodRange = (period: PeriodInfo): string => {
 };
 
 export const CryptoBetting = () => {
+    const { addOrder } = useBets();
     const [selectedSide, setSelectedSide] = useState<'up' | 'down'>('up');
     const [orderType, setOrderType] = useState<'buy' | 'sell'>('buy');
     const [amount, setAmount] = useState<string>('0');
@@ -91,6 +93,7 @@ export const CryptoBetting = () => {
     const [chartData] = useState(generateMockChartData());
     const [currentPrice, setCurrentPrice] = useState(87840.20);
     const [period] = useState(getCurrentPeriod());
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Odds (in dollars)
     const upOdds = 0.74;
@@ -128,6 +131,61 @@ export const CryptoBetting = () => {
 
     const handleQuickAmount = (value: number) => {
         setAmount(prev => (parseFloat(prev) + value).toString());
+    };
+
+    // Handle place bet
+    const handlePlaceBet = async () => {
+        const betAmount = parseFloat(amount);
+        if (isNaN(betAmount) || betAmount < 1) {
+            alert('Please enter a valid amount (minimum $1)');
+            return;
+        }
+        if (betAmount > 10000) {
+            alert('Maximum bet amount is $10,000');
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        const odds = selectedSide === 'up' ? upOdds : downOdds;
+        const potentialWin = betAmount / odds;
+
+        // Add order to global state
+        addOrder({
+            eventId: `btc_${period.start.getTime()}`,
+            eventName: `BTC ${selectedSide === 'up' ? '▲' : '▼'} Prediction`,
+            mode: selectedSide === 'up' ? 'sniper' : 'vol',
+            modeLabel: `Bitcoin · ${selectedSide === 'up' ? 'Up' : 'Down'}`,
+            optionId: `btc_${selectedSide}`,
+            optionLabel: `${formatPeriodRange(period)}`,
+            amount: betAmount,
+            odds: odds,
+            potentialWin: potentialWin,
+        });
+
+        setIsSubmitting(false);
+        setAmount('0');
+
+        // Show toast notification
+        const notification = document.createElement('div');
+        notification.className = 'bet-success-toast';
+        notification.innerHTML = `
+            <div class="toast-content">
+                <span class="toast-icon">✅</span>
+                <div class="toast-text">
+                    <strong>${orderType === 'buy' ? 'Bought' : 'Sold'} ${selectedSide === 'up' ? 'Up' : 'Down'}!</strong>
+                    <span>BTC · $${betAmount}</span>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     };
 
     const orderBookData = generateMockOrderBook(orderBookTab);
@@ -272,8 +330,12 @@ export const CryptoBetting = () => {
                     </div>
 
                     {/* Action Button */}
-                    <button className={`action-btn ${selectedSide}`}>
-                        {orderType === 'buy' ? 'Buy' : 'Sell'} {selectedSide === 'up' ? 'Up' : 'Down'}
+                    <button
+                        className={`action-btn ${selectedSide}`}
+                        onClick={handlePlaceBet}
+                        disabled={isSubmitting || parseFloat(amount) < 1}
+                    >
+                        {isSubmitting ? 'Placing...' : `${orderType === 'buy' ? 'Buy' : 'Sell'} ${selectedSide === 'up' ? 'Up' : 'Down'}`}
                     </button>
 
                     <p className="terms">By trading, you agree to the <a href="#">Terms of Use</a>.</p>
