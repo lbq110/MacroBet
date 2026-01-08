@@ -5,23 +5,58 @@
   color: var(--text-primary);
 }
 
-/* Sidebar Navigation */
+/* Sidebar Navigation - Premium Design */
 .sidebar {
-  width: 260px;
-  background: var(--bg-secondary);
-  border-right: 1px solid var(--border-regular);
+  width: 280px;
+  background: linear-gradient(180deg,
+      rgba(18, 18, 24, 0.98) 0%,
+      rgba(10, 10, 16, 0.99) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-6) var(--space-5);
   flex-shrink: 0;
+  position: relative;
+}
+
+/* Subtle gradient border on right side */
+.sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -1px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg,
+      rgba(59, 130, 246, 0.3) 0%,
+      rgba(139, 92, 246, 0.2) 50%,
+      rgba(59, 130, 246, 0.1) 100%);
 }
 
 .sidebar-logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--accent-blue);
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: var(--space-8);
-  padding-left: var(--space-2);
+  padding-left: var(--space-3);
+  position: relative;
+}
+
+/* Glow effect behind logo */
+.sidebar-logo::before {
+  content: 'MacroBet';
+  position: absolute;
+  left: var(--space-3);
+  filter: blur(20px);
+  opacity: 0.4;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .nav-links {
@@ -33,28 +68,66 @@
 .nav-btn {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-4);
   border: none;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   font-size: 0.95rem;
   font-weight: 500;
-  border-radius: 8px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-btn svg {
+  opacity: 0.6;
+  transition: all 0.25s;
 }
 
 .nav-btn:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+}
+
+.nav-btn:hover svg {
+  opacity: 0.9;
 }
 
 .nav-btn.active {
-  background: var(--accent-blue);
+  background: linear-gradient(135deg,
+      rgba(14, 165, 233, 0.9) 0%,
+      rgba(6, 182, 212, 0.9) 100%);
   color: white;
+  font-weight: 600;
+  box-shadow:
+    0 8px 25px rgba(14, 165, 233, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
+
+.nav-btn.active svg {
+  opacity: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* Active indicator line */
+.nav-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: white;
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
 
 /* Main Content Area */
 .main-wrapper {
