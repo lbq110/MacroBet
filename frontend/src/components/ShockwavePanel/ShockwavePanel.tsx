@@ -4,6 +4,7 @@ import type { ShockwaveEvent } from '../../types';
 import { EventStatus, ShockwaveSubMode } from '../../types';
 import { useI18n } from '../../i18n';
 import { useOdds } from '../../hooks/useOdds';
+import { useBets } from '../../context/BetsContext';
 import './ShockwavePanel.css';
 
 interface ShockwavePanelProps {
@@ -23,6 +24,9 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
 
     // Fetch real-time odds (3 second refresh)
     const { odds } = useOdds(event.id, 3000);
+
+    // Global bets state
+    const { addOrder } = useBets();
 
     // Countdown Logic
     useEffect(() => {
@@ -137,13 +141,26 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
 
         setIsSubmitting(false);
 
-        // Show success state - keep modal open briefly to show confirmation
-        const betDetails = {
-            mode: activeMode?.toUpperCase(),
-            option: selectedOption?.rangeLabel,
-            amount: amount,
-            potentialWin: activeMode === 'jackpot' ? amount * (selectedOption?.odds || 1) : null
+        // Get mode label for display
+        const getModeLabel = (mode: string | null): string => {
+            if (mode === 'sniper') return '🎯 Data Sniper';
+            if (mode === 'vol') return '🌊 Volatility Hunter';
+            if (mode === 'jackpot') return '🎰 Jackpot';
+            return mode || '';
         };
+
+        // Add order to global state
+        addOrder({
+            eventId: event.id,
+            eventName: `${event.indicatorName} Shockwave`,
+            mode: activeMode as 'sniper' | 'vol' | 'jackpot',
+            modeLabel: getModeLabel(activeMode),
+            optionId: selectedOptionId,
+            optionLabel: selectedOption?.rangeLabel || '',
+            amount: amount,
+            odds: selectedOption?.odds || null,
+            potentialWin: activeMode === 'jackpot' ? amount * (selectedOption?.odds || 1) : null,
+        });
 
         // Close modal and show toast-style feedback
         setShowBetModal(false);
@@ -158,7 +175,7 @@ export const ShockwavePanel: React.FC<ShockwavePanelProps> = ({ event }) => {
                 <span class="toast-icon">✅</span>
                 <div class="toast-text">
                     <strong>Bet Placed Successfully!</strong>
-                    <span>${betDetails.option} · $${betDetails.amount}</span>
+                    <span>${selectedOption?.rangeLabel} · $${amount}</span>
                 </div>
             </div>
         `;

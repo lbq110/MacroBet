@@ -1,40 +1,62 @@
 import React, { useState } from 'react';
 import { useI18n } from '../../i18n';
-import { Search, ArrowUpRight, Info, ChevronDown, Banknote } from 'lucide-react';
+import { useBets } from '../../context/BetsContext';
+import type { BetOrder } from '../../context/BetsContext';
+import { Search, ArrowUpRight, Info, ChevronDown, Banknote, Clock, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import './Portfolio.css';
 
 type TabType = 'positions' | 'openOrders' | 'history';
 type TimeFilter = '1D' | '1W' | '1M' | 'ALL';
 
-interface Position {
-    id: string;
-    market: string;
-    avgPrice: number;
-    currentPrice: number;
-    bet: number;
-    toWin: number;
-    value: number;
-    direction: 'UP' | 'DOWN';
-}
-
-// Mock data - empty for now
-const MOCK_POSITIONS: Position[] = [];
-
 export const Portfolio: React.FC = () => {
     const { t } = useI18n();
-    const [activeTab, setActiveTab] = useState<TabType>('positions');
+    const { getOpenOrders, getHistory, getTotalPending } = useBets();
+
+    const [activeTab, setActiveTab] = useState<TabType>('openOrders');
     const [timeFilter, setTimeFilter] = useState<TimeFilter>('1D');
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Mock portfolio data
-    const portfolioValue = 0.00;
-    const cashBalance = 0.00;
-    const profitLoss = 0.00;
-    const profitPercent = 0;
+    // Calculate portfolio stats from orders
+    const openOrders = getOpenOrders();
+    const historyOrders = getHistory();
+    const totalPending = getTotalPending();
 
-    const filteredPositions = MOCK_POSITIONS.filter(p =>
-        p.market.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const portfolioValue = totalPending;
+    const cashBalance = 0.00; // Would come from user account
+    const profitLoss = historyOrders.reduce((sum, o) => {
+        if (o.status === 'won') return sum + (o.payout || 0) - o.amount;
+        if (o.status === 'lost') return sum - o.amount;
+        return sum;
+    }, 0);
+    const profitPercent = portfolioValue > 0 ? (profitLoss / portfolioValue) * 100 : 0;
+
+    // Filter based on search
+    const filterOrders = (orderList: BetOrder[]) => {
+        if (!searchQuery) return orderList;
+        return orderList.filter(o =>
+            o.eventName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            o.optionLabel.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    };
+
+    const getStatusIcon = (status: BetOrder['status']) => {
+        switch (status) {
+            case 'pending': return <Clock size={14} className="status-icon pending" />;
+            case 'won': return <CheckCircle size={14} className="status-icon won" />;
+            case 'lost': return <XCircle size={14} className="status-icon lost" />;
+            case 'refunded': return <RefreshCw size={14} className="status-icon refunded" />;
+        }
+    };
+
+    const formatDate = (dateStr: string) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
 
     return (
         <div className="portfolio-page animate-fade-in">
@@ -66,7 +88,9 @@ export const Portfolio: React.FC = () => {
                 <div className="portfolio-card profit-loss-card">
                     <div className="card-header">
                         <span className="card-title">
-                            <span className={`pnl-indicator ${profitLoss >= 0 ? 'positive' : 'negative'}`}>▲</span>
+                            <span className={`pnl-indicator ${profitLoss >= 0 ? 'positive' : 'negative'}`}>
+                                {profitLoss >= 0 ? '▲' : '▼'}
+                            </span>
                             {t.portfolio.profitLoss}
                         </span>
                         <div className="time-filters">
@@ -81,38 +105,38 @@ export const Portfolio: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                    <div className="card-value">
-                        ${profitLoss.toFixed(2)}
+                    <div className={`card-value ${profitLoss >= 0 ? 'positive' : 'negative'}`}>
+                        {profitLoss >= 0 ? '+' : ''}${profitLoss.toFixed(2)}
                         <Info size={14} className="info-icon" />
                     </div>
                     <div className="card-period">{t.portfolio.pastDay}</div>
                     <div className="pnl-chart">
-                        <div className="pnl-bar" style={{ width: `${Math.max(5, profitPercent)}%` }}></div>
+                        <div className="pnl-bar" style={{ width: `${Math.max(5, Math.abs(profitPercent))}%` }}></div>
                     </div>
                 </div>
             </div>
 
-            {/* Positions Section */}
+            {/* Orders Section */}
             <div className="positions-section">
                 {/* Tabs */}
                 <div className="positions-tabs">
-                    <button
-                        className={`tab-btn ${activeTab === 'positions' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('positions')}
-                    >
-                        {t.portfolio.positions}
-                    </button>
                     <button
                         className={`tab-btn ${activeTab === 'openOrders' ? 'active' : ''}`}
                         onClick={() => setActiveTab('openOrders')}
                     >
                         {t.portfolio.openOrders}
+                        {openOrders.length > 0 && (
+                            <span className="tab-count">{openOrders.length}</span>
+                        )}
                     </button>
                     <button
                         className={`tab-btn ${activeTab === 'history' ? 'active' : ''}`}
                         onClick={() => setActiveTab('history')}
                     >
                         {t.portfolio.history}
+                        {historyOrders.length > 0 && (
+                            <span className="tab-count">{historyOrders.length}</span>
+                        )}
                     </button>
                 </div>
 
@@ -133,39 +157,97 @@ export const Portfolio: React.FC = () => {
                     </button>
                 </div>
 
-                {/* Table Header */}
-                <div className="positions-table">
-                    <div className="table-header">
-                        <div className="col-market">{t.portfolio.market}</div>
-                        <div className="col-avg">{t.portfolio.avgToNow} <Info size={12} /></div>
-                        <div className="col-bet">{t.portfolio.bet}</div>
-                        <div className="col-towin">{t.portfolio.toWin}</div>
-                        <div className="col-value">
-                            {t.portfolio.value}
-                            <ChevronDown size={12} />
-                        </div>
-                    </div>
-
-                    {/* Table Body */}
-                    <div className="table-body">
-                        {filteredPositions.length === 0 ? (
+                {/* Orders List */}
+                <div className="orders-list">
+                    {activeTab === 'openOrders' && (
+                        filterOrders(openOrders).length === 0 ? (
                             <div className="empty-state">
-                                {t.portfolio.noPositions}
+                                <Clock size={48} />
+                                <p>No open orders</p>
+                                <span>Place a bet to see it here</span>
                             </div>
                         ) : (
-                            filteredPositions.map(position => (
-                                <div key={position.id} className="position-row">
-                                    <div className="col-market">{position.market}</div>
-                                    <div className="col-avg">
-                                        ${position.avgPrice.toFixed(2)} → ${position.currentPrice.toFixed(2)}
+                            filterOrders(openOrders).map(order => (
+                                <div key={order.id} className="order-card pending">
+                                    <div className="order-header">
+                                        <div className="order-event">
+                                            <span className="event-name">{order.eventName}</span>
+                                            <span className="mode-badge">{order.modeLabel}</span>
+                                        </div>
+                                        <div className="order-status">
+                                            {getStatusIcon(order.status)}
+                                            <span>Pending</span>
+                                        </div>
                                     </div>
-                                    <div className="col-bet">${position.bet.toFixed(2)}</div>
-                                    <div className="col-towin">${position.toWin.toFixed(2)}</div>
-                                    <div className="col-value">${position.value.toFixed(2)}</div>
+                                    <div className="order-details">
+                                        <div className="detail-row">
+                                            <span className="label">Selection</span>
+                                            <span className="value selection">{order.optionLabel}</span>
+                                        </div>
+                                        <div className="detail-row">
+                                            <span className="label">Amount</span>
+                                            <span className="value">${order.amount.toFixed(2)}</span>
+                                        </div>
+                                        {order.potentialWin && (
+                                            <div className="detail-row">
+                                                <span className="label">Potential Win</span>
+                                                <span className="value potential">${order.potentialWin.toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="order-footer">
+                                        <span className="order-time">{formatDate(order.createdAt)}</span>
+                                    </div>
                                 </div>
                             ))
-                        )}
-                    </div>
+                        )
+                    )}
+
+                    {activeTab === 'history' && (
+                        filterOrders(historyOrders).length === 0 ? (
+                            <div className="empty-state">
+                                <Clock size={48} />
+                                <p>No trade history</p>
+                                <span>Completed bets will appear here</span>
+                            </div>
+                        ) : (
+                            filterOrders(historyOrders).map(order => (
+                                <div key={order.id} className={`order-card ${order.status}`}>
+                                    <div className="order-header">
+                                        <div className="order-event">
+                                            <span className="event-name">{order.eventName}</span>
+                                            <span className="mode-badge">{order.modeLabel}</span>
+                                        </div>
+                                        <div className={`order-status ${order.status}`}>
+                                            {getStatusIcon(order.status)}
+                                            <span>{order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                                        </div>
+                                    </div>
+                                    <div className="order-details">
+                                        <div className="detail-row">
+                                            <span className="label">Selection</span>
+                                            <span className="value selection">{order.optionLabel}</span>
+                                        </div>
+                                        <div className="detail-row">
+                                            <span className="label">Bet</span>
+                                            <span className="value">${order.amount.toFixed(2)}</span>
+                                        </div>
+                                        {order.payout !== undefined && (
+                                            <div className="detail-row">
+                                                <span className="label">Payout</span>
+                                                <span className={`value ${order.status === 'won' ? 'won' : ''}`}>
+                                                    ${order.payout.toFixed(2)}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="order-footer">
+                                        <span className="order-time">{formatDate(order.settledAt || order.createdAt)}</span>
+                                    </div>
+                                </div>
+                            ))
+                        )
+                    )}
                 </div>
             </div>
         </div>
